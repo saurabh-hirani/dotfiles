@@ -158,10 +158,10 @@ set splitbelow
 " don't outdent hashes
 inoremap # #
 autocmd FileType python UltiSnipsAddFiletypes django
-"autocmd FileType css UltiSnipsAddFiletypes css
-"autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
-"autocmd FileType xml UltiSnipsAddFiletypes xml
-"
+autocmd FileType html UltiSnipsAddFiletypes javascript
+autocmd FileType css UltiSnipsAddFiletypes css
+autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
+autocmd FileType xml UltiSnipsAddFiletypes xml
 
 Bundle 'benjifisher/matchit.zip'
 
@@ -246,13 +246,15 @@ let g:jedi#goto_definitions_command = "<leader>d"
 let g:jedi#documentation_command = "K"
 let g:jedi#usages_command = "<leader>n"
 "let g:jedi#completions_command = "<C-Space>"
-let g:jedi#completions_command = "<C-Space>"
+let g:jedi#completions_command = "<s-tab>"
 let g:jedi#rename_command = "<leader>r"
 let g:jedi#show_call_signatures = "1"
 au FileType python setlocal completeopt-=preview
+"set omnifunc=jedi#completions
 
 " to use with tmux -2 - so as to enable wombat
 set t_ut=
 
 Bundle 'Valloric/YouCompleteMe'
 autocmd GUIEnter * set vb t_vb=
+abb btk `
