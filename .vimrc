@@ -1,13 +1,48 @@
+" CHECK THIS FIRST
+"
+" requires vim 7.4
+"
+" works on fedora 20 but on ubuntu 12.04 you have to compile vim7.4
+"
+" follow instructions on https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source
+"
+" add these steps to enable lua (required for jedi-vim):
+"
+" apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dev
+" cp -rpv /usr/include/lua5.1/* /usr/include/lua5.1/include
+" ln -s /usr/lib/x86_64-linux-gnu/liblua5.1.so /usr/local/lib/liblua.so
+" add  --enable-luainterp to above link configure phase
+" use checkinstall to create reusable package
+" check by doing: vim --version | grep lua | less
+"
+" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+" vim +BundleInstall
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-let mapleader=","  
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+let mapleader=","
+
+" global config
+filetype on
+syntax on
+filetype indent on
+filetype plugin on
+
+au BufRead,BufNewFile *.json set filetype=json 
+
+" escape the tyranny of escape
+imap jk 
+
+" save on the fly
+noremap <Leader>s :update<CR>
+
+" shift+zz to save and quit
 
 " let Vundle manage Vundle
-" " required! 
-Bundle 'gmarik/vundle'
+" " required!
+Bundle 'gmarik/Vundle.vim'
 
 " my bundles
 
@@ -25,8 +60,8 @@ map <leader>nt :NERDTreeToggle<CR>
 Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsJumpForwardTrigger="<c-i>"
+let g:UltiSnipsJumpBackwardTrigger="<c-o>"
 let g:UltiSnipsEditSplit="vertical"
 set runtimepath+=~/.vim/bundle/ultisnips
 
@@ -65,15 +100,26 @@ map <leader>td <Plug>TaskList
 Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-unimpaired'
 
-"let g:syntastic_mode_map = { 'mode': 'active' }
+let g:syntastic_mode_map = { 'mode': 'active' }
 "let g:syntastic_mode_map = { 'mode': 'active',
 "    \ 'active_filetypes': [],
 "    \ 'passive_filetypes': ['html'] }
 "
-map <leader>c :SyntasticCheck<CR>:silent
-map <leader>cc :SyntasticReset<CR>:silent
+map <leader>c :SyntasticCheck<CR>
+map <leader>cc :SyntasticReset<CR>
+
+let g:syntastic_check_on_open = 1
+let g:syntastic_enable_signs = 1
+
+" requires yum install pylint
 let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_pylint_args = '--ignore="W0613"'
+let g:syntastic_python_pylint_args = '--ignore="W0613" --indent-string="  "'
+
+" requires npm install jsonlint - see to it that ruby gem jsonlint path does
+" not come first in the path
+let g:syntastic_json_checkers=['jsonlint']
+let g:syntastic_error_symbol = 'x'
+let g:syntastic_warning_symbol = '!'
 
 Bundle 'voithos/vim-python-matchit'
 " ]%  - go to end of block
@@ -98,9 +144,9 @@ map <Leader>so :SessionOpen
 map <Leader>ss :SessionSave<CR>
 map <Leader>ssa :SessionSaveAs 
 
-Bundle 'mileszs/ack.vim'
-let g:ackprg="/usr/local/bin/ack -H --nocolor --nogroup --column"
-map <Leader>s :Ack 
+"Bundle 'mileszs/ack.vim'
+"let g:ackprg="/usr/local/bin/ack -H --nocolor --nogroup --column"
+"map <Leader>s :Ack 
 " apt-get install ack-grep
 " ln -s /usr/bin/ack-grep /usr/local/bin/ack
 
@@ -133,13 +179,7 @@ map <Leader>q :bd<CR>
 set hidden " allow hidden buffers
 
 
-" global config
-
-filetype on
-syntax on
-filetype indent on
-filetype plugin on
-set ts=4 et sw=4 sts=4
+"set ts=4 et sw=4 sts=4
 
 " code folding
 set foldmethod=indent
@@ -157,10 +197,10 @@ set splitbelow
 
 " don't outdent hashes
 inoremap # #
-autocmd FileType python UltiSnipsAddFiletypes django
+"autocmd FileType python UltiSnipsAddFiletypes django
 autocmd FileType html UltiSnipsAddFiletypes javascript
 autocmd FileType css UltiSnipsAddFiletypes css
-autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
+"autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
 autocmd FileType xml UltiSnipsAddFiletypes xml
 
 Bundle 'benjifisher/matchit.zip'
@@ -202,13 +242,12 @@ let g:solarized_termtrans = 1
 Bundle 'jnurmine/Zenburn'
 Bundle 'vim-scripts/Wombat'
 Bundle 'tomasr/molokai'
-Bundle 'michalbachowski/vim-wombat256mod'
-colorscheme wombat256mod
+"Bundle 'michalbachowski/vim-wombat256mod'
 
 let g:rehash256 = 1
 set laststatus=2
 let g:lightline = {
-\ 'colorscheme': 'wombat',
+\ 'colorscheme': 'jellybeans',
 \ }
 
 set tags=~/mytags
@@ -255,6 +294,47 @@ au FileType python setlocal completeopt-=preview
 " to use with tmux -2 - so as to enable wombat
 set t_ut=
 
-Bundle 'Valloric/YouCompleteMe'
+"Bundle 'Valloric/YouCompleteMe'
+
+call vundle#end()
+filetype plugin indent on
+
 autocmd GUIEnter * set vb t_vb=
 abb btk `
+
+" for 80 col coding
+autocmd FileType python set colorcolumn=80
+autocmd FileType ruby set colorcolumn=80
+highlight ColorColumn ctermbg=brown guibg=orange
+autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
+set ts=2 et sw=2 sts=2
+set noswapfile
+
+Bundle 'aklt/vim-substitute'
+
+"let marvim_store = '/home/shirani/marvim.store'
+"let marvim_find_key = '<Space>' " change find key from <F2> to 'space'
+"let marvim_store_key = 'ms'     " change store key from <F3> to 'ms'
+"let marvim_register = 'c'       " change used register from 'q' to 'c'
+"let marvim_prefix = 0           " disable default syntax based prefix
+"source /home/shirani/.vim/bundle/marvim/plugin/marvim.vim
+
+Bundle 'elzr/vim-json'
+let g:vim_json_syntax_conceal=0
+"let g:indentLine_noConcealCursor=""
+"augroup json_autocmd 
+"  autocmd! 
+"  autocmd FileType json set autoindent 
+"  "autocmd FileType json set formatoptions=tcq2l 
+"  autocmd FileType json set textwidth=78 shiftwidth=2 
+"  autocmd FileType json set softtabstop=2 tabstop=8 
+"  autocmd FileType json set expandtab 
+"  autocmd FileType json set foldmethod=syntax 
+"augroup END
+
+Bundle 'rodnaph/vim-color-schemes'
+colorscheme solarized
+
+"http://stackoverflow.com/questions/2024443/saving-vim-macros
+"http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
+source /var/tmp/buffers.vim
