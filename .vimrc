@@ -118,6 +118,7 @@ let g:syntastic_python_pylint_args = '--ignore="W0613" --indent-string="  "'
 " requires npm install jsonlint - see to it that ruby gem jsonlint path does
 " not come first in the path
 let g:syntastic_json_checkers=['jsonlint']
+let g:syntastic_json_jsonlint_exec = '/usr/bin/jsonlint'
 let g:syntastic_error_symbol = 'x'
 let g:syntastic_warning_symbol = '!'
 
@@ -337,4 +338,4 @@ colorscheme solarized
 
 "http://stackoverflow.com/questions/2024443/saving-vim-macros
 "http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
-source /var/tmp/buffers.vim
+"source /var/tmp/buffers.vim
