@@ -242,7 +242,7 @@ let g:solarized_termtrans = 1
 " colorschems
 Bundle 'jnurmine/Zenburn'
 Bundle 'vim-scripts/Wombat'
-Bundle 'tomasr/molokai'
+"Bundle 'tomasr/molokai'
 "Bundle 'michalbachowski/vim-wombat256mod'
 
 let g:rehash256 = 1
@@ -276,21 +276,21 @@ inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
 inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 
 Bundle 'davidhalter/jedi-vim'
-let g:jedi#popup_select_first = 0
-let g:jedi#auto_initialization = 1
-let g:jedi#auto_vim_configuration = 1
-let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#completions_enabled = 1
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = "<leader>n"
-"let g:jedi#completions_command = "<C-Space>"
-let g:jedi#completions_command = "<s-tab>"
-let g:jedi#rename_command = "<leader>r"
-let g:jedi#show_call_signatures = "1"
+au FileType python let g:jedi#popup_select_first = 0
+au FileType python let g:jedi#auto_initialization = 1
+au FileType python let g:jedi#auto_vim_configuration = 1
+au FileType python let g:jedi#use_tabs_not_buffers = 0
+au FileType python let g:jedi#completions_enabled = 1
+au FileType python let g:jedi#goto_assignments_command = "<leader>g"
+au FileType python let g:jedi#goto_definitions_command = "<leader>d"
+au FileType python let g:jedi#documentation_command = "K"
+au FileType python let g:jedi#usages_command = "<leader>n"
+au FileType python let g:jedi#completions_command = "<s-tab>"
+au FileType python let g:jedi#rename_command = "<leader>r"
+au FileType python let g:jedi#show_call_signatures = "1"
+
 au FileType python setlocal completeopt-=preview
-"set omnifunc=jedi#completions
+set omnifunc=jedi#completions
 
 " to use with tmux -2 - so as to enable wombat
 set t_ut=
@@ -322,6 +322,7 @@ Bundle 'aklt/vim-substitute'
 
 Bundle 'elzr/vim-json'
 let g:vim_json_syntax_conceal=0
+let g:vim_json_warnings=1
 "let g:indentLine_noConcealCursor=""
 "augroup json_autocmd 
 "  autocmd! 
@@ -338,4 +339,43 @@ colorscheme solarized
 
 "http://stackoverflow.com/questions/2024443/saving-vim-macros
 "http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
-"source /var/tmp/buffers.vim
+source /var/tmp/buffers.vim
+
+" golang
+Plugin 'fatih/vim-go'
+Bundle 'fatih/molokai'
+
+au BufRead,BufNewFile *.go set filetype=go
+"autocmd BufEnter *.go colorscheme molokai
+
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>i <Plug>(go-info)
+au FileType go nmap <Leader>e <Plug>(go-rename)
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_interfaces = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+let g:go_autodetect_gopath = 0
+
+let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+
+" omni complete up down
+:inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
+:inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
