@@ -115,6 +115,8 @@ let g:syntastic_enable_signs = 1
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_pylint_args = '--ignore="W0613" --indent-string="  "'
 
+let g:syntastic_ruby_checkers = ['rubocop']
+
 " requires npm install jsonlint - see to it that ruby gem jsonlint path does
 " not come first in the path
 let g:syntastic_json_checkers=['jsonlint']
@@ -275,12 +277,15 @@ let g:SuperTabDefaultCompletionType="context"
 inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
 inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 
+Bundle 'aklt/vim-substitute'
+let g:substitute_SingleWordSize = -1
+
 Bundle 'davidhalter/jedi-vim'
 au FileType python let g:jedi#popup_select_first = 0
 au FileType python let g:jedi#auto_initialization = 1
 au FileType python let g:jedi#auto_vim_configuration = 1
 au FileType python let g:jedi#use_tabs_not_buffers = 0
-au FileType python let g:jedi#completions_enabled = 1
+au FileType python let g:jedi#completions_enabled = 0
 au FileType python let g:jedi#goto_assignments_command = "<leader>g"
 au FileType python let g:jedi#goto_definitions_command = "<leader>d"
 au FileType python let g:jedi#documentation_command = "K"
@@ -311,7 +316,6 @@ autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
 set ts=2 et sw=2 sts=2
 set noswapfile
 
-Bundle 'aklt/vim-substitute'
 
 "let marvim_store = '/home/shirani/marvim.store'
 "let marvim_find_key = '<Space>' " change find key from <F2> to 'space'
@@ -379,3 +383,6 @@ let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 " omni complete up down
 :inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
 :inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
+
+"let @n=":%s!,\\n      }!      }!cg"
+"so /var/tmp/shirani.vimrc
