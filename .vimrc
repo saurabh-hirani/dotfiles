@@ -67,9 +67,9 @@ set runtimepath+=~/.vim/bundle/ultisnips
 
 " work required post install to make auto file detection work
 " mkdir -p ~/.vim/after/plugin
-" ln -s ~/.vim/bundle/UltiSnips/after/plugin/* ~/.vim/after/plugin
+" ln -s ~/.vim/bundle/UltiSnips/after/plugin/UltiSnips_after.vim  ~/.vim/after/plugin
 " mkdir ~/.vim/ftdetect
-" ln -s ~/.vim/bundle/UltiSnips/ftdetect/* ~/.vim/ftdetect
+" ln -s ~/.vim/bundle/ultisnips/ftdetect/ ~/.vim/ftdetect
 
 " plugin youcompleteme
 " not installed as it requires vim 7.4 + is too heavy to install and keep in git
@@ -115,7 +115,7 @@ let g:syntastic_enable_signs = 1
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_pylint_args = '--ignore="W0613" --indent-string="  "'
 
-let g:syntastic_ruby_checkers = ['rubocop']
+"let g:syntastic_ruby_checkers = ['rubocop']
 
 " requires npm install jsonlint - see to it that ruby gem jsonlint path does
 " not come first in the path
@@ -201,10 +201,13 @@ set splitbelow
 " don't outdent hashes
 inoremap # #
 "autocmd FileType python UltiSnipsAddFiletypes django
-autocmd FileType html UltiSnipsAddFiletypes javascript
-autocmd FileType css UltiSnipsAddFiletypes css
+"autocmd FileType html UltiSnipsAddFiletypes javascript
+"autocmd FileType css UltiSnipsAddFiletypes css
 "autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
-autocmd FileType xml UltiSnipsAddFiletypes xml
+"autocmd FileType xml UltiSnipsAddFiletypes xml
+"autocmd FileType python UltiSnipsAddFiletypes python
+"autocmd FileType go UltiSnipsAddFiletypes go
+"autocmd FileType ruby UltiSnipsAddFiletypes ruby
 
 Bundle 'benjifisher/matchit.zip'
 
@@ -265,17 +268,17 @@ let g:neocomplete#sources#syntax#min_keyword_length = 3
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 let g:neocomplcache_enable_fuzzy_completion = 0
 
-Bundle 'ervandew/supertab'
-set omnifunc=syntaxcomplete#Complete
-"au FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-set completeopt=menu
-let g:SuperTabDefaultCompletionType="context"
-" to do text select via j/k
-inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
-inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
+"Bundle 'ervandew/supertab'
+"set omnifunc=syntaxcomplete#Complete
+""au FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
+"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+"set completeopt=menu
+"let g:SuperTabDefaultCompletionType="context"
+"" to do text select via j/k
+"inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
+"inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
 
 Bundle 'aklt/vim-substitute'
 let g:substitute_SingleWordSize = -1
@@ -306,10 +309,11 @@ call vundle#end()
 filetype plugin indent on
 
 autocmd GUIEnter * set vb t_vb=
-abb btk `
+abb xybtk `
 
 " for 80 col coding
 autocmd FileType python set colorcolumn=80
+autocmd FileType python set sw=2 ts=2
 autocmd FileType ruby set colorcolumn=80
 highlight ColorColumn ctermbg=brown guibg=orange
 autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
@@ -379,10 +383,20 @@ let g:go_autodetect_gopath = 0
 
 let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
 let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:go_term_enabled = 1
+
 
 " omni complete up down
 :inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
 :inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
 
 "let @n=":%s!,\\n      }!      }!cg"
-"so /var/tmp/shirani.vimrc
+so /var/tmp/shirani.vimrc
+
+Bundle 'vim-ruby/vim-ruby'
+
+"Bundle 'sourcegraph/sourcegraph-vim'
+"nnoremap <F2> :GRAPH<CR>
+"let g:SOURCEGRAPH_LOG_LEVEL = 2
+
+Bundle 'bronson/vim-trailing-whitespace'
