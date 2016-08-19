@@ -113,7 +113,7 @@ let g:syntastic_enable_signs = 1
 
 " requires yum install pylint
 let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_pylint_args = '--ignore="W0613" --indent-string="  "'
+let g:syntastic_python_pylint_args = '--disable="W0613,C0330" --indent-string="  "'
 
 "let g:syntastic_ruby_checkers = ['rubocop']
 
@@ -389,9 +389,6 @@ let g:go_term_enabled = 1
 " omni complete up down
 :inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
 :inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
-
-"let @n=":%s!,\\n      }!      }!cg"
-so /var/tmp/shirani.vimrc
 
 Bundle 'vim-ruby/vim-ruby'
 
