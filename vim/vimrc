@@ -1,25 +1,31 @@
-" CHECK THIS FIRST
+" README!!
 "
-" requires vim 7.4
+" Supported OS:
+"   1. Fedora 20 - you can get vim 7.4
 "
-" works on fedora 20 but on ubuntu 12.04 you have to compile vim7.4
+"   2. Ubuntu - you have to compile 7.4
 "
-" follow instructions on https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source
+"     follow instructions on https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source
 "
-" add these steps to enable lua (required for jedi-vim):
+"     add these steps to enable lua (required for jedi-vim):
 "
-" apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dev
-" cp -rpv /usr/include/lua5.1/* /usr/include/lua5.1/include
-" ln -s /usr/lib/x86_64-linux-gnu/liblua5.1.so /usr/local/lib/liblua.so
-" add  --enable-luainterp to above link configure phase
-" use checkinstall to create reusable package
-" check by doing: vim --version | grep lua | less
+"     apt-get install lua5.1 liblua5.1-0 liblua5.1-0-dev
+"     cp -rpv /usr/include/lua5.1/* /usr/include/lua5.1/include
+"     ln -s /usr/lib/x86_64-linux-gnu/liblua5.1.so /usr/local/lib/liblua.so
+"     add  --enable-luainterp to above link configure phase
+"     use checkinstall to create reusable package
+"     check by doing: vim --version | grep lua | less
 "
-" git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-" vim +BundleInstall
+"   3. Mac OS X - using system vim causes problems with plugins - use neovim instead
+"
+" Installing plugins
+"   - git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+"   - vim +BundleInstall
+
 set nocompatible               " be iMproved
 filetype off                   " required!
 
+" Use vundle
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 let mapleader=","
@@ -28,9 +34,34 @@ let mapleader=","
 filetype on
 syntax on
 filetype indent on
-filetype plugin on
+set nu
+set ts=2 et sw=2 sts=2
+set noswapfile
+" to use with tmux -2 - so as to enable wombat
+set t_ut=
+autocmd GUIEnter * set vb t_vb=
+abb xybtk `
 
-au BufRead,BufNewFile *.json set filetype=json 
+" set filetypes
+au BufRead,BufNewFile *.json set filetype=json
+au BufRead,BufNewFile *.go set filetype=go
+au BufRead,BufNewFile *.template set filetype=json
+au BufRead,BufNewFile *.tfvars set filetype=hcl
+
+" colorschemes
+Bundle 'jnurmine/Zenburn'
+Bundle 'vim-scripts/Wombat'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'rodnaph/vim-color-schemes'
+
+set background=dark
+let g:solarized_termtrans = 1
+
+let g:rehash256 = 1
+set laststatus=2
+let g:lightline = {
+\ 'colorscheme': 'jellybeans',
+\ }
 
 " escape the tyranny of escape
 imap jk 
@@ -41,40 +72,40 @@ noremap <Leader>s :update<CR>
 " shift+zz to save and quit
 
 " let Vundle manage Vundle
-" " required!
 Bundle 'gmarik/Vundle.vim'
 
-" my bundles
-
-Bundle 'majutsushi/tagbar'
-nmap <F8> :TagbarToggle<CR>
-
+" nerdtree settings
 Bundle 'scrooloose/nerdtree'
 map <leader>nt :NERDTreeToggle<CR>
-" mappings
 " o - open file in current window and shift focus
 " go - open file in current window but leave cursor in nerdtree
 " i - open file in new split window and shift focus
 " gi - open file in new split window but leave cursor in nerdtree
 
+" snippets
 Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
+
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-i>"
 let g:UltiSnipsJumpBackwardTrigger="<c-o>"
 let g:UltiSnipsEditSplit="vertical"
 set runtimepath+=~/.vim/bundle/ultisnips
 
+"autocmd FileType python UltiSnipsAddFiletypes django
+"autocmd FileType html UltiSnipsAddFiletypes javascript
+"autocmd FileType css UltiSnipsAddFiletypes css
+"autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
+"autocmd FileType xml UltiSnipsAddFiletypes xml
+"autocmd FileType python UltiSnipsAddFiletypes python
+"autocmd FileType go UltiSnipsAddFiletypes go
+"autocmd FileType ruby UltiSnipsAddFiletypes ruby
+
 " work required post install to make auto file detection work
 " mkdir -p ~/.vim/after/plugin
 " ln -s ~/.vim/bundle/UltiSnips/after/plugin/UltiSnips_after.vim  ~/.vim/after/plugin
 " mkdir ~/.vim/ftdetect
 " ln -s ~/.vim/bundle/ultisnips/ftdetect/ ~/.vim/ftdetect
-
-" plugin youcompleteme
-" not installed as it requires vim 7.4 + is too heavy to install and keep in git
-"Bundle 'Valloric/YouCompleteMe'
-
 
 py << EOF
 import os.path
@@ -87,42 +118,11 @@ if 'VIRTUAL_ENV' in os.environ:
     execfile(activate_this, dict(__file__=activate_this))
 EOF
 
-"Bundle 'klen/rope-vim'
-" not using as of now - as search/replacement very slow
-"map <leader>j :RopeGotoDefinition<CR>
-"map <leader>r :RopeRename<CR>
-
+" add TODO at top of your file and ,td will search it
 Bundle 'vim-scripts/TaskList.vim'
 map <leader>td <Plug>TaskList
-" add TODO at top of your file and ,td will search it
 
-" apt-get install pyflakes pylint
-Bundle 'scrooloose/syntastic'
 Bundle 'tpope/vim-unimpaired'
-
-let g:syntastic_mode_map = { 'mode': 'active' }
-"let g:syntastic_mode_map = { 'mode': 'active',
-"    \ 'active_filetypes': [],
-"    \ 'passive_filetypes': ['html'] }
-"
-map <leader>c :SyntasticCheck<CR>
-map <leader>cc :SyntasticReset<CR>
-
-let g:syntastic_check_on_open = 1
-let g:syntastic_enable_signs = 1
-
-" requires yum install pylint
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_pylint_args = '--disable="W0613,C0330" --indent-string="  "'
-
-"let g:syntastic_ruby_checkers = ['rubocop']
-
-" requires npm install jsonlint - see to it that ruby gem jsonlint path does
-" not come first in the path
-let g:syntastic_json_checkers=['jsonlint']
-let g:syntastic_json_jsonlint_exec = '/usr/bin/jsonlint'
-let g:syntastic_error_symbol = 'x'
-let g:syntastic_warning_symbol = '!'
 
 Bundle 'voithos/vim-python-matchit'
 " ]%  - go to end of block
@@ -131,6 +131,7 @@ Bundle 'voithos/vim-python-matchit'
 " V]% - select whole block in visual
 " d]% - select whole block in visual
 
+" fuzzy search
 Bundle 'kien/ctrlp.vim'
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -143,30 +144,16 @@ let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
 " enter to open it inline
 
 Bundle 'vim-scripts/sessionman.vim'
-map <Leader>so :SessionOpen 
+map <Leader>so :SessionOpen
 map <Leader>ss :SessionSave<CR>
-map <Leader>ssa :SessionSaveAs 
-
-"Bundle 'mileszs/ack.vim'
-"let g:ackprg="/usr/local/bin/ack -H --nocolor --nogroup --column"
-"map <Leader>s :Ack 
-" apt-get install ack-grep
-" ln -s /usr/bin/ack-grep /usr/local/bin/ack
+map <Leader>ssa :SessionSaveAs
 
 Bundle 'itchyny/lightline.vim'
 Bundle 'bling/vim-bufferline'
 
-"let g:lightline = {
-"  \ 'active': {
-"  \   'left': [ [ 'mode', 'paste' ], [ 'filename' ], [ 'bufferline' ] ],
-"  \ },
-"  \ 'component': {
-"  \   'bufferline': '%{bufferline#refresh_status()}%{g:bufferline_status_info.before . g:bufferline_status_info.current . g:bufferline_status_info.after}'
-"  \ }
-"  \ }
+" tabbing through panes
 map <C-J> :bprev<CR>
 map <C-K> :bnext<CR>
-"map <Leader>, :bnext<CR>
 map <Leader>, :e#<CR>
 nnoremap <Leader>1 :2b<CR>
 nnoremap <Leader>2 :3b<CR>
@@ -181,17 +168,36 @@ nnoremap <Leader>9 :10b<CR>
 map <Leader>q :bd<CR>
 set hidden " allow hidden buffers
 
+" indentation code folding - enable below 2 lines if you want indentation to code fold
+set foldmethod=manual " set to indent to make auto folding enabled
+set foldlevel=0 
 
-"set ts=4 et sw=4 sts=4
+" uncomment to remember folds on save
+"augroup remember_folds
+"  autocmd!
+"  autocmd BufWinLeave *.* mkview
+"  autocmd BufWinEnter *.* loadview
+"augroup END
 
-" code folding
-set foldmethod=indent
-set foldlevel=99 " type za to open up
+" folding commands
+" zf#j creates a fold from the cursor down # lines.
+" zf/string creates a fold from the cursor to string.
+" zj moves the cursor to the next fold.
+" zk moves the cursor to the previous fold.
+" zo opens a fold at the cursor.
+" zO opens all folds at the cursor.
+" zm increases the foldlevel by one.
+" zM closes all open folds.
+" zr decreases the foldlevel by one.
+" zR decreases the foldlevel to zero -- all folds will be open.
+" zd deletes the fold at the cursor.
+" zE deletes all folds.
+" [z move to start of open fold.
+" ]z move to end of open fold.
 
 " execute python
 set splitbelow
 :map <leader>e :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee ~/.vim/output<CR>:split ~/.vim/output<CR>:redraw!<CR>
-
 " move around windows
 "map <c-j> <c-w>j
 "map <c-k> <c-w>k
@@ -200,29 +206,23 @@ set splitbelow
 
 " don't outdent hashes
 inoremap # #
-"autocmd FileType python UltiSnipsAddFiletypes django
-"autocmd FileType html UltiSnipsAddFiletypes javascript
-"autocmd FileType css UltiSnipsAddFiletypes css
-"autocmd FileType javascript UltiSnipsAddFiletypes javascript.javascript_jasmine.json
-"autocmd FileType xml UltiSnipsAddFiletypes xml
-"autocmd FileType python UltiSnipsAddFiletypes python
-"autocmd FileType go UltiSnipsAddFiletypes go
-"autocmd FileType ruby UltiSnipsAddFiletypes ruby
 
 Bundle 'benjifisher/matchit.zip'
 
 Bundle 'hynek/vim-python-pep8-indent'
 
 Bundle 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_enable_on_vim_startup = 0
+let g:indent_guides_guide_size=1
 
 Bundle 'pangloss/vim-javascript'
 let g:javascript_enable_domhtmlcss=1
 
+" This plug-in provides automatic closing of quotes, parenthesis, brackets, etc.,
 Bundle 'Raimondi/delimitMate'
 
+" The MatchTagAlways.vim (MTA) plug-in for the Vim text editor always highlights the XML/HTML tags that enclose your cursor location.
 Bundle 'valloric/MatchTagAlways'
-
-"Bundle 'vim-scripts/buftabs'
 
 Bundle 'vim-scripts/jQuery'
 au BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
@@ -237,125 +237,58 @@ Bundle 'altercation/vim-colors-solarized'
 syntax enable
 if !has('gui_running')
   set t_Co=256
-  set term=xterm-256color
+  "set term=xterm-256color
 endif
-
-set background=dark
-"let g:solarized_termcolors=256
-let g:solarized_termtrans = 1
-
-" colorschems
-Bundle 'jnurmine/Zenburn'
-Bundle 'vim-scripts/Wombat'
-"Bundle 'tomasr/molokai'
-"Bundle 'michalbachowski/vim-wombat256mod'
-
-let g:rehash256 = 1
-set laststatus=2
-let g:lightline = {
-\ 'colorscheme': 'jellybeans',
-\ }
 
 set tags=~/mytags
 map <leader>t :silent! !ctags -R -o ~/mytags .<CR>
 
-Bundle 'Shougo/neocomplete.vim'
-let g:neocomplcache_enable_at_startup = 1
-let g:acp_enableAtStartup = 1 
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-let g:neocomplcache_enable_fuzzy_completion = 0
-
-"Bundle 'ervandew/supertab'
-"set omnifunc=syntaxcomplete#Complete
-""au FileType python set omnifunc=pythoncomplete#Complete
-"autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-"autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-"autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-"set completeopt=menu
-"let g:SuperTabDefaultCompletionType="context"
-"" to do text select via j/k
-"inoremap <expr> j ((pumvisible())?("\<C-n>"):("j"))
-"inoremap <expr> k ((pumvisible())?("\<C-p>"):("k"))
-
+"The substitute.vim script provides shortcuts for replacing the text under the cursor
+";;  Run |:substitute| on the current buffer without prompting.
+";'  The same, only prompt for each.
+"';  Perform substitution on the lines that match a *multi-repeat*
+"    expression, prompting for each.
 Bundle 'aklt/vim-substitute'
 let g:substitute_SingleWordSize = -1
 
+"
+"
+"Completion - tab
+"Goto assignments <leader>g
+"Goto definitions <leader>d
+"Show Documentation/Pydoc K (shows a popup with assignments)
+"Renaming <leader>r
+"Usages <leader>n (shows all the usages of a name)
+"Open module, e.g. :Pyimport os (opens the os module)<Paste>
 Bundle 'davidhalter/jedi-vim'
-au FileType python let g:jedi#popup_select_first = 0
-au FileType python let g:jedi#auto_initialization = 1
-au FileType python let g:jedi#auto_vim_configuration = 1
-au FileType python let g:jedi#use_tabs_not_buffers = 0
-au FileType python let g:jedi#completions_enabled = 0
-au FileType python let g:jedi#goto_assignments_command = "<leader>g"
-au FileType python let g:jedi#goto_definitions_command = "<leader>d"
-au FileType python let g:jedi#documentation_command = "K"
-au FileType python let g:jedi#usages_command = "<leader>n"
-au FileType python let g:jedi#completions_command = "<s-tab>"
-au FileType python let g:jedi#rename_command = "<leader>r"
-au FileType python let g:jedi#show_call_signatures = "1"
+set completeopt=menu
+
+"au FileType python let g:jedi#popup_select_first = 0
+"au FileType python let g:jedi#popup_on_dot = 1
+"au FileType python let g:jedi#auto_initialization = 1
+"au FileType python let g:jedi#auto_vim_configuration = 0
+"au FileType python let g:jedi#use_tabs_not_buffers = 0
+"au FileType python let g:jedi#completions_enabled = 0
+"au FileType python let g:jedi#goto_assignments_command = "<leader>g"
+"au FileType python let g:jedi#goto_definitions_command = "<leader>d"
+"au FileType python let g:jedi#documentation_command = "K"
+"au FileType python let g:jedi#usages_command = "<leader>n"
+"au FileType python let g:jedi#completions_command = "<s-tab>"
+"au FileType python let g:jedi#rename_command = "<leader>r"
+"au FileType python let g:jedi#show_call_signatures = 1
 
 au FileType python setlocal completeopt-=preview
 set omnifunc=jedi#completions
 
-" to use with tmux -2 - so as to enable wombat
-set t_ut=
-
-"Bundle 'Valloric/YouCompleteMe'
-
-call vundle#end()
-filetype plugin indent on
-
-autocmd GUIEnter * set vb t_vb=
-abb xybtk `
-
-" for 80 col coding
-autocmd FileType python set colorcolumn=80
-autocmd FileType python set sw=2 ts=2
-autocmd FileType ruby set colorcolumn=80
-highlight ColorColumn ctermbg=brown guibg=orange
-autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
-set ts=2 et sw=2 sts=2
-set noswapfile
-
-
-"let marvim_store = '/home/shirani/marvim.store'
-"let marvim_find_key = '<Space>' " change find key from <F2> to 'space'
-"let marvim_store_key = 'ms'     " change store key from <F3> to 'ms'
-"let marvim_register = 'c'       " change used register from 'q' to 'c'
-"let marvim_prefix = 0           " disable default syntax based prefix
-"source /home/shirani/.vim/bundle/marvim/plugin/marvim.vim
-
-Bundle 'elzr/vim-json'
-let g:vim_json_syntax_conceal=0
-let g:vim_json_warnings=1
-"let g:indentLine_noConcealCursor=""
-"augroup json_autocmd 
-"  autocmd! 
-"  autocmd FileType json set autoindent 
-"  "autocmd FileType json set formatoptions=tcq2l 
-"  autocmd FileType json set textwidth=78 shiftwidth=2 
-"  autocmd FileType json set softtabstop=2 tabstop=8 
-"  autocmd FileType json set expandtab 
-"  autocmd FileType json set foldmethod=syntax 
-"augroup END
-
-Bundle 'rodnaph/vim-color-schemes'
-colorscheme solarized
-
-"http://stackoverflow.com/questions/2024443/saving-vim-macros
-"http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
-source /var/tmp/buffers.vim
+" omni complete up down
+:inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
+:inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
 
 " golang
 Plugin 'fatih/vim-go'
 Bundle 'fatih/molokai'
 
-au BufRead,BufNewFile *.go set filetype=go
 "autocmd BufEnter *.go colorscheme molokai
-
 au FileType go nmap <leader>r <Plug>(go-run)
 au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
@@ -381,19 +314,94 @@ let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_autodetect_gopath = 0
 
-let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
-let g:go_term_enabled = 1
+" Not using syntastic in favor of neomake
+"Bundle "vim-syntastic/syntastic"
 
+"let g:syntastic_go_checkers = ['golint', 'govet', 'errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+"let g:go_term_enabled = 1
 
-" omni complete up down
-:inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
-:inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
+" Disable inherited syntastic
+"let g:syntastic_mode_map = {
+"  \ "mode": "passive",
+"  \ "active_filetypes": [],
+"  \ "passive_filetypes": [] }
 
 Bundle 'vim-ruby/vim-ruby'
 
-"Bundle 'sourcegraph/sourcegraph-vim'
-"nnoremap <F2> :GRAPH<CR>
-"let g:SOURCEGRAPH_LOG_LEVEL = 2
-
 Bundle 'bronson/vim-trailing-whitespace'
+
+" ======================== following config after neovim installed =================="
+
+" adding config after installing neovim - couldn't get ultisnips to work with
+" vim on macs
+
+" to run linters
+Bundle "neomake/neomake"
+
+" Run NeoMake on read and write operations
+autocmd! BufReadPost,BufWritePost * Neomake
+
+let g:neomake_serialize = 1
+let g:neomake_serialize_abort_on_error = 1
+
+" increase verbosity for debugging
+"let g:neomake_verbose=3
+"let g:neomake_logfile='/var/tmp/neomake.log'
+
+" pylint options are better set in ~/.pylintrc
+let g:neomake_python_enabled_makers = ['pylint']
+let g:neomake_json_enabled_makers = ['jsonlint']
+
+" autocompletion
+Bundle "Shougo/deoplete.nvim"
+let g:loaded_python_provider = 1
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_completion_start_length = 1
+let g:deoplete#enable_debug=1
+
+" select the colorscheme - just so that no one overrides it at the top
+"use autocmd because setting colorscheme via 'let' doesn't load it properly (long left vertical bar is shaded)
+autocmd VimEnter * colorscheme solarized
+
+" to make copy-paste work in mac - this is simply awesome
+set clipboard=unnamed
+
+" aws cloudformation - don't know how it works
+" Bundle "m-kat/aws-vim"
+
+" because vundle said so
+call vundle#end()
+filetype plugin indent on
+
+" for 80 col coding
+autocmd FileType python set colorcolumn=80
+autocmd FileType ruby set colorcolumn=80
+autocmd FileType python set sw=2 ts=2
+highlight ColorColumn ctermbg=red guibg=orange
+autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
+
+" pre-req: install geeknote from -  https://github.com/jeffkowalski/geeknote
+Bundle 'neilagabriel/vim-geeknote'
+let g:GeeknoteFormat="markdown"
+let g:GeeknoteNeovimMode="True"
+
+" edit crontab on mac
+autocmd filetype crontab setlocal nobackup nowritebackup
+
+Bundle "fatih/vim-hclfmt"
+
+" Download juliosueiras/vim-terraform-completion and dump it in /Users/hiranis/.vim/bundle/vim-snippets/UltiSnips/tf.snippets
+" because this expects *.tf files to be of type terraform and is in conflict
+" with vim-hclfmt which expects them to be of type hcl
+" Bundle "juliosueiras/vim-terraform-completion"
+
+" tips
+" :g/pattern/d - delete all lines matching pattern
+" :3,12g/pattern/d - delete all lines matching pattern from 3 to 12
+" :.,$g/pattern/d - delete all lines matching pattern from current to end
+" use gd to go to function definition if the function defined in the same file
+" links to help out with mass edits
+" http://stackoverflow.com/questions/2024443/saving-vim-macros
+" http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
+" source /var/tmp/buffers.vim
