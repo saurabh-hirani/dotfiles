@@ -1,0 +1,270 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH=$HOME/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="shirani"
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+# HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+# ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+# COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# HIST_STAMPS="mm/dd/yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git tmux autojump knife docker zsh-autosuggestions)
+
+source $ZSH/oh-my-zsh.sh
+
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=6'
+setopt NO_BEEP
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# path
+export PATH="/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$PATH"
+
+export EDITOR='nvim'
+
+# vi mode
+set -o vi
+
+# reverse search
+bindkey -v
+bindkey '^R' history-incremental-search-backward
+
+# required by chefdk
+eval "$(chef shell-init zsh)"
+
+# required by some term apps
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+source ~/.aliasrc
+
+#complete -C '/usr/local/bin/aws_completer' aws
+source /usr/local/bin/aws_zsh_completer.sh
+
+export GOPATH=~/go/packages
+export PATH="$PATH:$GOPATH/bin"
+
+export LESSOPEN="|tar --to-stdout -zxf %s"
+
+if [[ -f $HOME/.envvars ]]; then
+  source $HOME/.envvars 
+  export MYENVVARS_FILE="$HOME/.envvars"
+fi
+
+tmux-send-keys-to-all-windows() {
+  local keys=$1
+  curr_tmux_session=$(tmux display-message -p '#S')
+  for window in $(tmux list-windows | cut -f1 -d':'); do
+    tmux send-keys -t $curr_tmux_session:$window "$keys"
+  done
+}
+
+tmux-send-cmd-to-all-windows() {
+  local cmd=$1 
+  tmux-send-keys-to-all-windows "$cmd "
+}
+
+tmux-env-set() {
+  local var_name=$1
+  local var_value=$2
+
+  if ! [[ -f "$MYENVVARS_FILE" ]]; then
+    touch $MYENVVARS_FILE
+  fi
+
+  local set_env_var_cmd="export $var_name=$var_value"
+  local set_env_var_regex="^${set_env_var_cmd}$"
+
+  local curr_value=$(egrep "$set_env_var_regex" $MYENVVARS_FILE)
+  if ! [[ $? -eq 0 ]]; then
+    #egrep -v "$set_env_var_regex" $MYENVVARS_FILE > $MYENVVARS_FILE.tmp ; mv $MYENVVARS_FILE.tmp  $MYENVVARS_FILE
+    echo "unset $var_name"  | tee -a  $MYENVVARS_FILE
+    unset $var_name
+  fi
+  echo "$set_env_var_cmd" | tee -a $MYENVVARS_FILE
+
+  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+}
+
+tmux-env-unset() {
+  local var_name=$1
+
+  if ! [[ -f "$MYENVVARS_FILE" ]]; then
+    touch $MYENVVARS_FILE
+  fi
+
+  local set_env_var_cmd="export $var_name="
+  local set_env_var_regex="^${set_env_var_cmd}"
+
+  if egrep -q $set_env_var_regex $MYENVVARS_FILE; then
+    #egrep -v "$set_env_var_regex" $MYENVVARS_FILE > $MYENVVARS_FILE.tmp ; mv $MYENVVARS_FILE.tmp $MYENVVARS_FILE
+    echo "unset $var_name"  | tee -a $MYENVVARS_FILE
+  else
+    echo "$var_name: not set"
+  fi
+
+  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+}
+
+tmux-env-reload() {
+  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+}
+
+tmux-env-flush() {
+  egrep '^export' $MYENVVARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
+    echo "unset $var_name" 
+  done | tee $MYENVVARS_FILE.flushing
+  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE.flushing"
+  echo > $MYENVVARS_FILE
+}
+
+knife-profiles() {
+  ls -1A ~/.chef | grep -vi knife
+}
+
+show-knife-profile() {
+  local knife_profile=$1
+  echo CHEF_ENV=$knife_profile
+}
+
+set-knife-profile() {
+  local chef_env=$1
+  tmux-env-set CHEF_ENV ${chef_env}
+}
+
+unset-knife-profile() {
+  local chef_env=$1
+  tmux-env-unset CHEF_ENV
+}
+
+aws-profiles() {
+  cat ~/.aws/credentials | grep '\[' | grep -v '#' | tr -d '[' | tr -d ']'
+}
+
+show-aws-profile() {
+  local aws_profile=$1
+  profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
+  echo AWS_PROFILE=${aws_profile} 
+  echo AWS_ACCESS_KEY_ID="$(echo $profile_data | grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')"  AWS_SECRET_ACCESS_KEY="$(echo $profile_data | grep aws_secret_access_key | cut -f2 -d'=' | tr -d ' ')"
+}
+
+set-aws-profile() {
+  local aws_profile=$1
+  profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
+  tmux-env-set AWS_PROFILE ${aws_profile} 
+  tmux-env-set AWS_ACCESS_KEY_ID "$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d' ' | tr -d ' ')"
+  tmux-env-set AWS_SECRET_ACCESS_KEY "$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d' ' | tr -d ' ')"
+}
+
+unset-aws-profile() {
+  local aws_profile=$1
+  profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
+  tmux-env-unset $AWS_PROFILE
+  tmux-env-unset $AWS_ACCESS_KEY_ID
+  tmux-env-unset $AWS_SECRET_ACCESS_KEY
+}
+
+# COMPLETION SETTINGS
+# source $MYENVVARS_FILE.flushing 
+# dd custom completion scripts
+fpath=(~/.oh-my-zsh/completions $fpath)
+ 
+# compsys initialization
+autoload -U compinit
+compinit
+ 
+# show completion menu when number of options is at least 2
+zstyle ':completion:*' menu select=2
+
+if ! [[ -f $MYENVVARS_FILE ]]; then
+  touch $MYENVVARS_FILE
+fi
+source $MYENVVARS_FILE
+
+if [[ -f ~/.trello ]]; then
+  source ~/.trello
+fi
+
+source ~/.oh-my-zsh/completions/tmuxinator.zsh
+
+disable r
+
+export DISABLE_AUTO_TITLE=true
+export TRACKME_DISPLAY=true
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
