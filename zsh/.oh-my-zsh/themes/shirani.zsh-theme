@@ -199,6 +199,17 @@ prompt_chef() {
   fi
 }
 
+##### simple todo #####
+
+export CURRENT_TASK_FILE='/tmp/todo/current-task'
+export TODO_LOG_FILE="$HOME/todo/work.log"
+export TODO_DATE_FMT="+%Y.%m.%d-%H:%M:%S"
+export TASK_STATE='none'
+
+mkdir -p $HOME/todo
+mkdir -p /tmp/todo
+touch $TODO_LOG_FILE
+
 # https://unix.stackexchange.com/questions/27013/displaying-seconds-as-days-hours-mins-seconds/170299
 function displaytime {
   local T=$1
@@ -206,11 +217,140 @@ function displaytime {
   local H=$((T/60/60%24))
   local M=$((T/60%60))
   local S=$((T%60))
-  printf '%dd:' $D
-  printf '%dh:' $H
-  printf '%dm:' $M
+  printf '%dd|' $D
+  printf '%dh|' $H
+  printf '%dm|' $M
   printf '%ds\n' $S
 }
+
+log_task_data() {
+  msg=$1
+  echo "time:$(date "$TODO_DATE_FMT") $msg" >> $TODO_LOG_FILE
+}
+
+calc_task_time() {
+  target_file=$1
+  if [[ -z $target_file ]]; then
+    target_file=$CURRENT_TASK_FILE 
+  fi
+  curr_time=$(date +%s)
+  last_mtime=$(stat -s $target_file | awk '{print $10}'  | cut -f2 -d'=')
+
+  total_time_spent=$(echo "$curr_time - $last_mtime" | bc )
+  total_time_spent_str=$(displaytime $total_time_spent)
+
+  echo $total_time_spent_str
+}
+
+task_status() {
+  task=$(cat $CURRENT_TASK_FILE)
+  total_time_spent_str=$(calc_task_time)
+
+  msg=$1
+
+  if [[ -z $msg ]]; then
+    if [[ -z $task ]]; then
+      msg="task:[nothing_planned] state:idle time_spent:[$total_time_spent_str]"
+    else
+      msg="task:[$task] state:inprogress time_spent:[$total_time_spent_str]"
+    fi
+  fi
+
+  echo $msg
+}
+
+task_report() {
+  if [[ -f $CURRENT_TASK_FILE ]]; then
+    task=$(cat $CURRENT_TASK_FILE)
+    grep "\[$task\]" $TODO_LOG_FILE
+  fi
+}
+
+task_clear() {
+  if [[ -f $CURRENT_TASK_FILE ]]; then
+    task=$(cat $CURRENT_TASK_FILE)
+    total_time_spent_str=$(calc_task_time)
+
+    export TASK_STATE='done'
+    msg="task:[$task] state:$TASK_STATE total_time_spent:[$total_time_spent_str]"
+    log_task_data $msg
+
+    task_report
+    echo > $CURRENT_TASK_FILE
+  fi
+}
+
+task_complete() {
+  task_clear
+}
+
+task_reset() {
+  if [[ -f $CURRENT_TASK_FILE ]]; then
+    task=$(cat $CURRENT_TASK_FILE)
+
+    export TASK_STATE='inprogress'
+    msg="task:[$task] state:$TASK_STATE"
+    echo $msg
+    log_task_data $msg
+
+    touch $CURRENT_TASK_FILE
+  fi
+}
+
+task_pause() {
+  reason=$1
+
+  if [[ -z $reason ]]; then
+    reason='na'
+  fi
+
+  if [[ -f $CURRENT_TASK_FILE ]]; then
+    touch ${CURRENT_TASK_FILE}.pause
+    export TASK_STATE='pause'
+    msg="task:[$task] state:$TASK_STATE reason:$reason"
+    log_task_data $msg
+  fi
+}
+
+task_resume() {
+  if [[ -f $CURRENT_TASK_FILE ]]; then
+    total_time_paused_str=$(calc_task_time ${CURRENT_TASK_FILE}.pause)
+
+    rm -f ${CURRENT_TASK_FILE}.pause
+
+    export TASK_STATE='inprogress'
+    msg="task:[$task] state:$TASK_STATE time_paused:[$total_time_paused_str]"
+
+    log_task_data $msg
+  fi
+}
+
+task_start() {
+  task=$1
+
+  echo $task > $CURRENT_TASK_FILE
+
+  export TASK_STATE='start'
+  msg="task:[$task] state:$TASK_STATE"
+  log_task_data $msg
+  task_status $msg
+}
+
+build_rprompt() {
+  RETVAL=$?
+  msg=$1
+  if [[ -z $msg ]]; then
+    date >> /var/tmp/test.txt
+    if [[ -f $CURRENT_TASK_FILE ]]; then
+      msg="$(task_status)"
+    fi
+  fi
+  prompt_status
+  prompt_segment black green "$msg"
+  prompt_end
+}
+
+##### simple todo #####
 
 ## Main prompt
 build_lprompt() {
@@ -227,3 +367,4 @@ build_lprompt() {
 
 PROMPT='%{%f%b%k%}$(build_lprompt) 
 ➙ '
+RPROMPT='%{%f%b%k%}$(build_rprompt)'
