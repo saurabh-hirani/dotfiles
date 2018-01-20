@@ -205,7 +205,13 @@ export CURRENT_TASK_FILE='/tmp/todo/current-task'
 export TODO_LOG_FILE="$HOME/todo/work.log"
 export TODO_DATE_FMT="+%Y.%m.%d-%H:%M:%S"
 export TASK_STATE='none'
-export DATECMD='/usr/local/bin/gdate'
+
+MAC_COREUTILS_DATE='/usr/local/bin/gdate'
+if [[ -f $MAC_COREUTILS_DATE ]]; then
+  export DATECMD="$MAC_COREUTILS_DATE" 
+else
+  export DATECMD="$(which date)" 
+fi
 
 mkdir -p $HOME/todo
 mkdir -p /tmp/todo
