@@ -205,6 +205,7 @@ export CURRENT_TASK_FILE='/tmp/todo/current-task'
 export TODO_LOG_FILE="$HOME/todo/work.log"
 export TODO_DATE_FMT="+%Y.%m.%d-%H:%M:%S"
 export TASK_STATE='none'
+export DATECMD='/usr/local/bin/gdate'
 
 mkdir -p $HOME/todo
 mkdir -p /tmp/todo
@@ -225,7 +226,7 @@ function displaytime {
 
 log_task_data() {
   msg=$1
-  echo "time:$(date "$TODO_DATE_FMT") $msg" >> $TODO_LOG_FILE
+  echo "time:$($DATECMD "$TODO_DATE_FMT") $msg" >> $TODO_LOG_FILE
 }
 
 calc_task_time() {
@@ -233,7 +234,7 @@ calc_task_time() {
   if [[ -z $target_file ]]; then
     target_file=$CURRENT_TASK_FILE 
   fi
-  curr_time=$(date +%s)
+  curr_time=$($DATECMD +%s)
   last_mtime=$(stat -s $target_file | awk '{print $10}'  | cut -f2 -d'=')
 
   total_time_spent=$(echo "$curr_time - $last_mtime" | bc )
@@ -250,7 +251,8 @@ task_status() {
 
   if [[ -z $msg ]]; then
     if [[ -z $task ]]; then
-      msg="task:[nothing_planned] state:idle time_spent:[$total_time_spent_str]"
+      export TASK_STATE='idle'
+      msg="task:[nothing_planned] state:$TASK_STATE time_spent:[$total_time_spent_str]"
     else
       msg="task:[$task] state:inprogress time_spent:[$total_time_spent_str]"
     fi
@@ -260,10 +262,37 @@ task_status() {
 }
 
 task_report() {
-  if [[ -f $CURRENT_TASK_FILE ]]; then
-    task=$(cat $CURRENT_TASK_FILE)
-    grep "\[$task\]" $TODO_LOG_FILE
+  task=$1
+  if [[ -z $task ]]; then
+    echo ---
+    if [[ -f $CURRENT_TASK_FILE ]]; then
+      task=$(cat $CURRENT_TASK_FILE)
+    fi
   fi
+  grep "task:\[$task\]" $TODO_LOG_FILE
+}
+
+task_report_today() {
+  today=$($DATECMD "+%Y.%m.%d")
+  grep "time:$today" $TODO_LOG_FILE
+}
+
+task_report_yesterday() {
+  yesterday=$($DATECMD --date='1 day ago' "+%Y.%m.%d")
+  grep "time:$yesterday" $TODO_LOG_FILE
+}
+
+task_report_month() {
+  month=$($DATECMD "+%Y.%m")
+  grep "time:$month" $TODO_LOG_FILE
+}
+
+task_report_list_all_tasks() {
+  grep ' task:' $TODO_LOG_FILE | cut -f2 -d' '  | cut -f2 -d'[' | tr -d ']' | sort | uniq
+}
+
+task_report_list_done_tasks() {
+  grep ' task:' $TODO_LOG_FILE | grep 'state:done'
 }
 
 task_clear() {
@@ -298,31 +327,48 @@ task_reset() {
 }
 
 task_pause() {
-  reason=$1
-
-  if [[ -z $reason ]]; then
-    reason='na'
-  fi
-
   if [[ -f $CURRENT_TASK_FILE ]]; then
-    touch ${CURRENT_TASK_FILE}.pause
-    export TASK_STATE='pause'
-    msg="task:[$task] state:$TASK_STATE reason:$reason"
-    log_task_data $msg
+    reason=$1
+
+    if [[ -z $reason ]]; then
+      reason='na'
+    fi
+
+    if [[ -f $CURRENT_TASK_FILE ]]; then
+      echo $reason > ${CURRENT_TASK_FILE}.pause
+      export TASK_STATE='pause'
+      msg="task:[$task] state:$TASK_STATE reason:$reason"
+      log_task_data $msg
+    fi
   fi
 }
 
 task_resume() {
-  if [[ -f $CURRENT_TASK_FILE ]]; then
+  if [[ -f $CURRENT_TASK_FILE ]] && [[ -f ${CURRENT_TASK_FILE}.pause ]]; then
+
+    reason=$1
+
+    if [[ -z $reason ]]; then
+      reason=$(cat ${CURRENT_TASK_FILE}.pause)
+    fi
+
     total_time_paused_str=$(calc_task_time ${CURRENT_TASK_FILE}.pause)
 
     rm -f ${CURRENT_TASK_FILE}.pause
 
     export TASK_STATE='inprogress'
-    msg="task:[$task] state:$TASK_STATE time_paused:[$total_time_paused_str]"
+    msg="task:[$task] state:$TASK_STATE time_paused:[$total_time_paused_str] reason:$reason"
 
     log_task_data $msg
   fi
+}
+
+task_checkin() {
+  task_resume 'checkin'
+}
+
+task_checkout() {
+  task_pause 'checkout'
 }
 
 task_start() {
@@ -340,7 +386,6 @@ build_rprompt() {
   RETVAL=$?
   msg=$1
   if [[ -z $msg ]]; then
-    date >> /var/tmp/test.txt
     if [[ -f $CURRENT_TASK_FILE ]]; then
       msg="$(task_status)"
     fi
@@ -349,7 +394,6 @@ build_rprompt() {
   prompt_segment black green "$msg"
   prompt_end
 }
-
 ##### simple todo #####
 
 ## Main prompt
