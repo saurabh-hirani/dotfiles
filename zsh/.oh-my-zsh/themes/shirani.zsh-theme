@@ -204,7 +204,6 @@ prompt_chef() {
 export CURRENT_TASK_FILE='/tmp/todo/current-task'
 export TODO_LOG_FILE="$HOME/todo/work.log"
 export TODO_DATE_FMT="+%Y.%m.%d-%H:%M:%S"
-export TASK_STATE='none'
 
 MAC_COREUTILS_DATE='/usr/local/bin/gdate'
 if [[ -f $MAC_COREUTILS_DATE ]]; then
@@ -258,11 +257,11 @@ task_status() {
   if [[ -z $msg ]]; then
     if [[ -z $task ]]; then
       export TASK_STATE='idle'
-      msg="task:[nothing_planned] state:$TASK_STATE time_spent:[$total_time_spent_str]"
-    else
-      msg="task:[$task] state:inprogress time_spent:[$total_time_spent_str]"
+      task="nothing_planned"
     fi
   fi
+
+  msg="task:[$task] state:$TASK_STATE time_spent:[$total_time_spent_str]"
 
   echo $msg
 }
@@ -270,7 +269,6 @@ task_status() {
 task_report() {
   task=$1
   if [[ -z $task ]]; then
-    echo ---
     if [[ -f $CURRENT_TASK_FILE ]]; then
       task=$(cat $CURRENT_TASK_FILE)
     fi
@@ -382,7 +380,7 @@ task_start() {
 
   echo $task > $CURRENT_TASK_FILE
 
-  export TASK_STATE='start'
+  export TASK_STATE='inprogress'
   msg="task:[$task] state:$TASK_STATE"
   log_task_data $msg
   task_status $msg
@@ -400,6 +398,7 @@ build_rprompt() {
   prompt_segment black green "$msg"
   prompt_end
 }
+
 ##### simple todo #####
 
 ## Main prompt
