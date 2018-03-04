@@ -1,0 +1,15 @@
+atom-runner@2.7.1
+autocomplete-python@1.10.5
+build@0.70.0
+busy-signal@1.4.3
+file-icons@2.1.17
+go-debug@1.6.0
+go-plus@5.8.2
+intentions@1.1.5
+linter@2.0.0
+linter-pylint@2.1.1
+linter-ui-default@1.7.1
+platformio-ide-terminal@2.8.0
+python-tools@0.6.9
+vim-mode-plus@1.30.0
+

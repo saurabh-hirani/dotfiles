@@ -1,0 +1,28 @@
+"*":
+  "autocomplete-python":
+    useKite: false
+  build:
+    panelVisibility: "Hidden"
+  core:
+    telemetryConsent: "no"
+  "exception-reporting":
+    userId: "eb7daa5a-1bc0-47ed-8f95-638128f5ae7c"
+  "linter-ui-default":
+    panelHeight: 297
+  welcome:
+    showOnStartup: false
+".go.source":
+  editor:
+    tabLength: 8
+runner:
+  extensions:
+    ps1: "powershell –file"
+    "spec.coffee": "mocha"
+  scopes:
+    coffee: "coffee"
+    go: "go run"
+    js: "node"
+    powershell: "powershell -noninteractive -noprofile -c -"
+    python: "python"
+    ruby: "ruby"
+    shell: "bash"
