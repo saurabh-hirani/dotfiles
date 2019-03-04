@@ -8,6 +8,22 @@ export ZSH=$HOME/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="shirani"
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
+POWERLEVEL9K_SHORTEN_DELIMITER=""
+
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
+#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
+
+POWERLEVEL9K_COLOR_SCHEME='light'
+#POWERLEVEL9K_COLOR_SCHEME='dark'
+
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
+
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -88,7 +104,7 @@ setopt NO_BEEP
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # path
-export PATH="/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$PATH"
+export PATH="/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/2.7/bin/:$PATH"
 
 export EDITOR='nvim'
 
@@ -120,6 +136,10 @@ if [[ -f $HOME/.envvars ]]; then
   source $HOME/.envvars 
   export MYENVVARS_FILE="$HOME/.envvars"
 fi
+
+# powerline
+export POWERLINE_CONFIG_COMMAND="$HOME/Library/Python/2.7/bin/powerline-config"
+source $HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 
 tmux-send-keys-to-all-windows() {
   local keys=$1
