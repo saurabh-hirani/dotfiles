@@ -1,0 +1,8 @@
+{
+  "name": "Solarized dark",
+  "groups": {
+    "cwd":                 { "fg": "solarized:base1", "bg": "solarized:base02", "attrs": [] },
+    "cwd:current_folder":  { "fg": "solarized:base1", "bg": "solarized:base02", "attrs": [] },
+    "cwd:divider":         { "fg": "solarized:base1", "bg": "solarized:base02", "attrs": [] }
+  }
+}
