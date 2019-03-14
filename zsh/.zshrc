@@ -8,45 +8,106 @@ export ZSH=$HOME/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
+ZSH_THEME="agnoster"
+ZSH_THEME="shirani"
+ZSH_THEME="powerlevel9k/powerlevel9k"
+
+function reload-zshrc() {
+  . $HOME/.zshrc
+}
+
+function set-powerlevel9k-color-scheme() {
+  curr_session=$(tmux display-message -p '#S')
+  mkdir -p "$HOME/tmux-sessions/$curr_session"
+
+  echo $1 > $HOME/tmux-sessions/$curr_session/powerlevel9k-color-scheme
+}
+
+function get-powerlevel9k-color-scheme() {
+  curr_session=$(tmux display-message -p '#S')
+  mkdir -p "$HOME/tmux-sessions/$curr_session"
+  file="$HOME/tmux-sessions/$curr_session/powerlevel9k-color-scheme"
+  if [[ -f $file ]]; then
+    cat $file
+    return 0
+  else
+    set-powerlevel9k-color-scheme 'dark'
+  fi
+  echo 'dark'
+}
+
+func set-powerlevel9k-color-scheme-env() {
+  color_scheme=$1
+  if [[ $POWERLEVEL9K_COLOR_SCHEME == 'light' ]]; then
+    POWERLEVEL9K_DIR_HOME_BACKGROUND='white'
+    POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='white'
+    POWERLEVEL9K_DIR_ETC_BACKGROUND='white'
+    POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='white'
+
+    POWERLEVEL9K_DIR_HOME_FOREGROUND='010'
+    POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='010'
+    POWERLEVEL9K_DIR_ETC_FOREGROUND='010'
+    POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='010'
+
+    POWERLEVEL9K_VCS_CLEAN_BACKGROUND='white'
+    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='010'
+
+    POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='white'
+    # POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='019'
+    POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='016'
+
+    POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='white'
+    POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='016'
+  else
+    POWERLEVEL9K_DIR_HOME_BACKGROUND='004'
+    POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='004'
+    POWERLEVEL9K_DIR_ETC_BACKGROUND='004'
+    POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='004'
+
+    POWERLEVEL9K_DIR_HOME_FOREGROUND='black'
+    POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='black'
+    POWERLEVEL9K_DIR_ETC_FOREGROUND='black'
+    POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='black'
+
+    POWERLEVEL9K_VCS_CLEAN_BACKGROUND='002'
+    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
+
+    POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='002'
+    POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
+
+    POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='003'
+    POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
+  fi
+}
+
+function toggle-powerlevel9k-color-scheme() {
+  curr_color_scheme=''
+  curr_color_scheme=$(get-powerlevel9k-color-scheme)
+  if [[ $curr_color_scheme == 'light' ]]; then
+    new_color_scheme='dark'
+  else
+    new_color_scheme='light'
+  fi
+  set-powerlevel9k-color-scheme $new_color_scheme
+  set-powerlevel9k-color-scheme-env $new_color_scheme
+  echo $new_color_scheme
+}
+
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
 POWERLEVEL9K_SHORTEN_DELIMITER=""
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
 #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
 
-POWERLEVEL9K_COLOR_SCHEME='light'
-#POWERLEVEL9K_COLOR_SCHEME='dark'
+set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
 
-if [[ $POWERLEVEL9K_COLOR_SCHEME == 'light' ]]; then
-  POWERLEVEL9K_DIR_HOME_BACKGROUND='white'
-  POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='white'
-  POWERLEVEL9K_DIR_ETC_BACKGROUND='white'
-  POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='white'
-
-  POWERLEVEL9K_DIR_HOME_FOREGROUND='010'
-  POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='010'
-  POWERLEVEL9K_DIR_ETC_FOREGROUND='010'
-  POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='010'
-
-  POWERLEVEL9K_VCS_CLEAN_BACKGROUND='white'
-  POWERLEVEL9K_VCS_CLEAN_FOREGROUND='010'
-
-  POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='white'
-  # POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='019'
-  POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='016'
-
-  POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='white'
-  POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='016'
-fi
-
-ZSH_THEME="agnoster"
-ZSH_THEME="shirani"
-ZSH_THEME="powerlevel9k/powerlevel9k"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -144,6 +205,14 @@ eval "$(chef shell-init zsh)"
 # required by some term apps
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+# aliases
+alias toggle-prompt-color='toggle-powerlevel9k-color-scheme && reload-zshrc'
+alias toggle-prompt-color-all="toggle-powerlevel9k-color-scheme && tmux-send-cmd-to-all-windows 'reload-zshrc'"
+alias aws-clear-env='env | grep AWS | while read line; do var=$(echo $line|cut -f1 -d'='); echo $var; unset $var; done'
+alias aws-show-env='env | grep AWS'
+alias diffdir='diff -qr'
+alias perlpie='perl -pi -e'
 
 source ~/.aliasrc
 
