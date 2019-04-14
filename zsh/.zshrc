@@ -12,9 +12,45 @@ ZSH_THEME="agnoster"
 ZSH_THEME="shirani"
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
-function reload-zshrc() {
+darken() {
+  if [ -n "$ITERM_PROFILE" ]; then
+    export THEME=dark
+    it2prof dark
+    reload_profile
+  fi
+}
+
+lighten() {
+  if [ -n "$ITERM_PROFILE" ]; then
+    unset THEME
+    it2prof light
+    reload_profile
+  fi
+}
+
+it2prof() {
+  if [[ "$TERM" =~ "screen" ]]; then
+    scrn_prof "$1"
+  else
+    # send escape sequence to change iTerm2 profile
+    echo -e "\033]50;SetProfile=$1\007"
+  fi
+}
+
+scrn_prof() {
+  if [ -n "$TMUX" ]; then
+    # tell tmux to send escape sequence to underlying terminal
+    echo -e "\033Ptmux;\033\033]50;SetProfile=$1\007\033\\"
+  else
+    # tell gnu screen to send escape sequence to underlying terminal
+    echo -e "\033P\033]50;SetProfile=$1\007\033\\"
+  fi
+}
+
+function reload_profile() {
   . $HOME/.zshrc
 }
+
 
 function set-powerlevel9k-color-scheme() {
   curr_session=$(tmux display-message -p '#S')
@@ -93,15 +129,15 @@ function toggle-powerlevel9k-color-scheme() {
   echo $new_color_scheme
 }
 
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+POWERLEVEL9K_COLOR_SCHEME=$(get-powerlevel9k-color-scheme)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
 POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
-
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history)
+POWERLEVEL9K_MODE=”nerdfont-complete”
+POWERLEVEL9K_VCS_GIT_ALWAYS_SHOW_REMOTE_BRANCH='1' 
 #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
 #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
 
@@ -207,8 +243,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # aliases
-alias toggle-prompt-color='toggle-powerlevel9k-color-scheme && reload-zshrc'
-alias toggle-prompt-color-all="toggle-powerlevel9k-color-scheme && tmux-send-cmd-to-all-windows 'reload-zshrc'"
+alias toggle-prompt-color='toggle-powerlevel9k-color-scheme && reload_profile'
+alias toggle-prompt-color-all="toggle-powerlevel9k-color-scheme && tmux-send-cmd-to-all-windows 'reload_profile'"
 alias aws-clear-env='env | grep AWS | while read line; do var=$(echo $line|cut -f1 -d'='); echo $var; unset $var; done'
 alias aws-show-env='env | grep AWS'
 alias diffdir='diff -qr'
