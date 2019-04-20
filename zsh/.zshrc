@@ -13,19 +13,15 @@ ZSH_THEME="shirani"
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 darken() {
-  if [ -n "$ITERM_PROFILE" ]; then
-    export THEME=dark
-    it2prof dark
-    reload_profile
-  fi
+  export THEME=dark
+  it2prof dark
+  reload_profile
 }
 
 lighten() {
-  if [ -n "$ITERM_PROFILE" ]; then
-    unset THEME
-    it2prof light
-    reload_profile
-  fi
+  unset THEME
+  it2prof light
+  reload_profile
 }
 
 it2prof() {
