@@ -14,14 +14,23 @@ ZSH_THEME="powerlevel9k/powerlevel9k"
 
 darken() {
   export THEME=dark
+  export BAT_THEME=default
   it2prof dark
   reload_profile
 }
 
 lighten() {
   unset THEME
+  export BAT_THEME=ansi-light
   it2prof light
   reload_profile
+}
+
+whiten() {
+  unset THEME
+  it2prof blackonwhite
+  reload_profile
+  export BAT_THEME=ansi-light
 }
 
 it2prof() {
