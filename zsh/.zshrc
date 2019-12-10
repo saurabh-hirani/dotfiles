@@ -28,7 +28,7 @@ lighten() {
 
 whiten() {
   unset THEME
-  it2prof blackonwhite
+  it2prof white
   reload_profile
   export BAT_THEME=ansi-light
 }
@@ -229,7 +229,7 @@ setopt NO_BEEP
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # path
-export PATH="/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/2.7/bin/:$PATH"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/2.7/bin/:$PATH"
 
 export EDITOR='nvim'
 
@@ -241,7 +241,9 @@ bindkey -v
 bindkey '^R' history-incremental-search-backward
 
 # required by chefdk
-eval "$(chef shell-init zsh)"
+if [[ -x "$(command -v chef >/dev/null 2>&1)" ]]; then
+  eval "$(chef shell-init zsh)"
+fi
 
 # required by some term apps
 export LC_ALL=en_US.UTF-8
@@ -265,14 +267,15 @@ export PATH="$PATH:$GOPATH/bin"
 
 export LESSOPEN="|tar --to-stdout -zxf %s"
 
-if [[ -f $HOME/.envvars ]]; then
-  source $HOME/.envvars 
-  export MYENVVARS_FILE="$HOME/.envvars"
+export MY_ENV_VARS_FILE="$HOME/.envvars"
+
+if [[ -f $MY_ENV_VARS_FILE ]]; then
+  source $MY_ENV_VARS_FILE
 fi
 
 # powerline
-export POWERLINE_CONFIG_COMMAND="$HOME/Library/Python/2.7/bin/powerline-config"
-source $HOME/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
+export POWERLINE_CONFIG_COMMAND="/usr/local/bin/powerline-config"
+source /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 tmux-send-keys-to-all-windows() {
   local keys=$1
@@ -291,54 +294,54 @@ tmux-env-set() {
   local var_name=$1
   local var_value=$2
 
-  if ! [[ -f "$MYENVVARS_FILE" ]]; then
-    touch $MYENVVARS_FILE
+  if ! [[ -f "$MY_ENV_VARS_FILE" ]]; then
+    touch $MY_ENV_VARS_FILE
   fi
 
   local set_env_var_cmd="export $var_name=$var_value"
   local set_env_var_regex="^${set_env_var_cmd}$"
 
-  local curr_value=$(egrep "$set_env_var_regex" $MYENVVARS_FILE)
+  local curr_value=$(egrep "$set_env_var_regex" $MY_ENV_VARS_FILE)
   if ! [[ $? -eq 0 ]]; then
-    #egrep -v "$set_env_var_regex" $MYENVVARS_FILE > $MYENVVARS_FILE.tmp ; mv $MYENVVARS_FILE.tmp  $MYENVVARS_FILE
-    echo "unset $var_name"  | tee -a  $MYENVVARS_FILE
+    #egrep -v "$set_env_var_regex" $MY_ENV_VARS_FILE > $MY_ENV_VARS_FILE.tmp ; mv $MY_ENV_VARS_FILE.tmp  $MY_ENV_VARS_FILE
+    echo "unset $var_name"  | tee -a  $MY_ENV_VARS_FILE
     unset $var_name
   fi
-  echo "$set_env_var_cmd" | tee -a $MYENVVARS_FILE
+  echo "$set_env_var_cmd" | tee -a $MY_ENV_VARS_FILE
 
-  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
 tmux-env-unset() {
   local var_name=$1
 
-  if ! [[ -f "$MYENVVARS_FILE" ]]; then
-    touch $MYENVVARS_FILE
+  if ! [[ -f "$MY_ENV_VARS_FILE" ]]; then
+    touch $MY_ENV_VARS_FILE
   fi
 
   local set_env_var_cmd="export $var_name="
   local set_env_var_regex="^${set_env_var_cmd}"
 
-  if egrep -q $set_env_var_regex $MYENVVARS_FILE; then
-    #egrep -v "$set_env_var_regex" $MYENVVARS_FILE > $MYENVVARS_FILE.tmp ; mv $MYENVVARS_FILE.tmp $MYENVVARS_FILE
-    echo "unset $var_name"  | tee -a $MYENVVARS_FILE
+  if egrep -q $set_env_var_regex $MY_ENV_VARS_FILE; then
+    #egrep -v "$set_env_var_regex" $MY_ENV_VARS_FILE > $MY_ENV_VARS_FILE.tmp ; mv $MY_ENV_VARS_FILE.tmp $MY_ENV_VARS_FILE
+    echo "unset $var_name"  | tee -a $MY_ENV_VARS_FILE
   else
     echo "$var_name: not set"
   fi
 
-  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
 tmux-env-reload() {
-  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE"
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
 tmux-env-flush() {
-  egrep '^export' $MYENVVARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
+  egrep '^export' $MY_ENV_VARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
     echo "unset $var_name" 
-  done | tee $MYENVVARS_FILE.flushing
-  tmux-send-cmd-to-all-windows "source $MYENVVARS_FILE.flushing"
-  echo > $MYENVVARS_FILE
+  done | tee $MY_ENV_VARS_FILE.flushing
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE.flushing"
+  echo > $MY_ENV_VARS_FILE
 }
 
 knife-profiles() {
@@ -388,7 +391,7 @@ unset-aws-profile() {
 }
 
 # COMPLETION SETTINGS
-# source $MYENVVARS_FILE.flushing 
+# source $MY_ENV_VARS_FILE.flushing 
 # dd custom completion scripts
 fpath=(~/.oh-my-zsh/completions $fpath)
  
@@ -399,10 +402,11 @@ compinit
 # show completion menu when number of options is at least 2
 zstyle ':completion:*' menu select=2
 
-if ! [[ -f $MYENVVARS_FILE ]]; then
-  touch $MYENVVARS_FILE
+if ! [[ -f $MY_ENV_VARS_FILE ]]; then
+  touch $MY_ENV_VARS_FILE
 fi
-source $MYENVVARS_FILE
+
+source $MY_ENV_VARS_FILE
 
 if [[ -f ~/.trello ]]; then
   source ~/.trello
