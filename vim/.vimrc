@@ -89,6 +89,9 @@ autocmd VimEnter * colorscheme solarized
 " ========== Colorschemes ==========
 
 " ========== python ==========
+"
+" let g:python3_host_prog='/usr/local/bin/python3'
+
 py << EOF
 import os.path
 import sys
@@ -99,6 +102,7 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
 EOF
+
 " execute python
 set splitbelow
 :map <leader>e :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee ~/.vim/output<CR>:split ~/.vim/output<CR>:redraw!<CR>
@@ -364,9 +368,9 @@ autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set spell spelllang=en_us
 
 " ========== geeknote ==========
 " pre-req: install geeknote from -  https://github.com/jeffkowalski/geeknote
-Bundle 'neilagabriel/vim-geeknote'
-let g:GeeknoteFormat="markdown"
-let g:GeeknoteNeovimMode="True"
+" Bundle 'neilagabriel/vim-geeknote'
+" let g:GeeknoteFormat="markdown"
+" let g:GeeknoteNeovimMode="True"
 " ========== geeknote ==========
 
 " ========== terraform ==========
