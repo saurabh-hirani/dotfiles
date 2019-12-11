@@ -188,7 +188,7 @@ set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git tmux autojump knife docker zsh-autosuggestions)
+plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
