@@ -8,13 +8,11 @@ export ZSH=$HOME/.oh-my-zsh
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 
-ZSH_THEME="agnoster"
-ZSH_THEME="shirani"
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 darken() {
   export THEME=dark
-  export BAT_THEME=default
+  # export BAT_THEME=default
   it2prof dark
   reload_profile
 }
@@ -140,15 +138,13 @@ POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
 POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs)
 POWERLEVEL9K_MODE=”nerdfont-complete”
 POWERLEVEL9K_VCS_GIT_ALWAYS_SHOW_REMOTE_BRANCH='1' 
 #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
 #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
 
 set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
-
-
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -427,3 +423,6 @@ export TRACKME_DISPLAY=true
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
