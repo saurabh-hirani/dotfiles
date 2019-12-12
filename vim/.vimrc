@@ -89,9 +89,6 @@ autocmd VimEnter * colorscheme solarized
 " ========== Colorschemes ==========
 
 " ========== python ==========
-"
-" let g:python3_host_prog='/usr/local/bin/python3'
-
 py << EOF
 import os.path
 import sys
@@ -102,7 +99,6 @@ if 'VIRTUAL_ENV' in os.environ:
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
     execfile(activate_this, dict(__file__=activate_this))
 EOF
-
 " execute python
 set splitbelow
 :map <leader>e :w<CR>:silent !chmod +x %:p<CR>:silent !%:p 2>&1 \| tee ~/.vim/output<CR>:split ~/.vim/output<CR>:redraw!<CR>
@@ -357,7 +353,7 @@ filetype plugin indent on
 " ========== 80col ==========
 autocmd FileType python set colorcolumn=80
 autocmd FileType ruby set colorcolumn=80
-autocmd FileType python set sw=2 ts=2
+autocmd FileType python set sw=4 ts=4
 highlight ColorColumn ctermbg=red guibg=orange
 autocmd Syntax * syn match Error /\s\+$\| \+\ze\t/ containedin=ALL display
 " markdown
@@ -368,9 +364,9 @@ autocmd BufNewFile,BufRead *.md,*.mkd,*.markdown set spell spelllang=en_us
 
 " ========== geeknote ==========
 " pre-req: install geeknote from -  https://github.com/jeffkowalski/geeknote
-" Bundle 'neilagabriel/vim-geeknote'
-" let g:GeeknoteFormat="markdown"
-" let g:GeeknoteNeovimMode="True"
+Bundle 'neilagabriel/vim-geeknote'
+let g:GeeknoteFormat="markdown"
+let g:GeeknoteNeovimMode="True"
 " ========== geeknote ==========
 
 " ========== terraform ==========
