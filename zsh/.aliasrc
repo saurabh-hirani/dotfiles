@@ -37,6 +37,6 @@ alias cat='bat --style=plain'
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 alias ls='exa'
-alias l="exa -lahF"
+alias l="exa -lahF -snew"
 
 alias find='fd'

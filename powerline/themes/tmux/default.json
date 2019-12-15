@@ -1,23 +1,20 @@
 {
-	"segments": {
-		"right": [
+  "segments": {
+    "right": [
       {
-				"function": "powerline.segments.common.env.cwd",
-				"args": {
-					"use_path_separator": true
-				}
-			},
-			{
-				"function": "powerline.segments.common.time.date"
-			},
-			{
-				"function": "powerline.segments.common.time.date",
-				"name": "time",
-				"args": {
-					"format": "%H:%M",
-					"istime": true
-				}
-			}
-		]
-	}
+        "function": "powerline.segments.common.sys.system_load"
+      },
+      {
+        "function": "powerline.segments.common.time.date"
+      },
+      {
+        "function": "powerline.segments.common.time.date",
+        "name": "time",
+        "args": {
+          "format": "%H:%M",
+          "istime": true
+        }
+      }
+    ]
+  }
 }
