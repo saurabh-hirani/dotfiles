@@ -40,3 +40,4 @@ alias ls='exa'
 alias l="exa -lahF -snew"
 
 alias find='fd'
+alias vimdiff='nvim -d'

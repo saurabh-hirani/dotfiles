@@ -308,26 +308,6 @@ tmux-env-set() {
   tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
-tmux-env-unset() {
-  local var_name=$1
-
-  if ! [[ -f "$MY_ENV_VARS_FILE" ]]; then
-    touch $MY_ENV_VARS_FILE
-  fi
-
-  local set_env_var_cmd="export $var_name="
-  local set_env_var_regex="^${set_env_var_cmd}"
-
-  if egrep -q $set_env_var_regex $MY_ENV_VARS_FILE; then
-    #egrep -v "$set_env_var_regex" $MY_ENV_VARS_FILE > $MY_ENV_VARS_FILE.tmp ; mv $MY_ENV_VARS_FILE.tmp $MY_ENV_VARS_FILE
-    echo "unset $var_name"  | tee -a $MY_ENV_VARS_FILE
-  else
-    echo "$var_name: not set"
-  fi
-
-  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
-}
-
 tmux-env-reload() {
   tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
@@ -354,11 +334,6 @@ set-knife-profile() {
   tmux-env-set CHEF_ENV ${chef_env}
 }
 
-unset-knife-profile() {
-  local chef_env=$1
-  tmux-env-unset CHEF_ENV
-}
-
 aws-profiles() {
   cat ~/.aws/credentials | grep '\[' | grep -v '#' | tr -d '[' | tr -d ']'
 }
@@ -370,21 +345,20 @@ show-aws-profile() {
   echo AWS_ACCESS_KEY_ID="$(echo $profile_data | grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')"  AWS_SECRET_ACCESS_KEY="$(echo $profile_data | grep aws_secret_access_key | cut -f2 -d'=' | tr -d ' ')"
 }
 
-set-aws-profile() {
+set-aws-profile-local() {
   local aws_profile=$1
   profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
   tmux-env-set AWS_PROFILE ${aws_profile} 
-  tmux-env-set AWS_ACCESS_KEY_ID "$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d' ' | tr -d ' ')"
-  tmux-env-set AWS_SECRET_ACCESS_KEY "$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d' ' | tr -d ' ')"
+  tmux-env-set AWS_ACCESS_KEY_ID "$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d'=' | tr -d ' ')"
+  tmux-env-set AWS_SECRET_ACCESS_KEY "$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d'=' | tr -d ' ')"
 }
 
-unset-aws-profile() {
-  local aws_profile=$1
-  profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
-  tmux-env-unset $AWS_PROFILE
-  tmux-env-unset $AWS_ACCESS_KEY_ID
-  tmux-env-unset $AWS_SECRET_ACCESS_KEY
+set-aws-profile() {
+  set-aws-profile-local $1
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
+
+
 
 # COMPLETION SETTINGS
 # source $MY_ENV_VARS_FILE.flushing 
