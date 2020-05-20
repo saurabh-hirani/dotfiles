@@ -41,3 +41,11 @@ alias l="exa -lahF -snew"
 
 alias find='fd'
 alias vimdiff='nvim -d'
+
+alias w='watson'
+alias ww='watson stop; watson start work'
+alias wb='watson stop; watson start break'
+alias wcc='watson stop; watson start career'
+alias ws='watson status'
+alias wl='watson log -G'
+alias wr='watson report'
