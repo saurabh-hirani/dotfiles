@@ -3,6 +3,8 @@ if type nvim > /dev/null 2>&1; then
   alias vi='nvim'
 fi
 
+alias python=/usr/local/bin/python3
+
 alias b='berks'
 alias bu='berks upload'
 
@@ -23,7 +25,7 @@ alias jsonflatten='pyfunc -m pyfunc.utils.json_flatten'
 alias jsonview='python -m json.tool'
 
 alias gitpom='git push origin master'
-alias gitcwip='git commit -m "work in progress" && gitpom'
+alias gitcwip='git commit -m "work in progress" && branch=$(git rev-parse --abbrev-ref HEAD) && git push origin $branch'
 alias gitcread='git commit -m "updated readme" && gitpom'
 alias gitcminor='git commit -m "minor edits" && gitpom'
 alias gitcnotes='git commit -m "updated notes" && gitpom'
@@ -40,13 +42,5 @@ alias ls='exa'
 alias l="exa -lahF -snew"
 
 alias find='fd'
+alias cpwd='pwd | pbcopy'
 alias vimdiff='nvim -d'
-
-alias w='watson'
-alias ww='watson stop; watson start work'
-alias wb='watson stop; watson start break'
-alias wcc='watson stop; watson start career'
-alias wout='watson stop ; watson report -d'
-alias ws='watson status'
-alias wl='watson log -G'
-alias wr='watson report'
