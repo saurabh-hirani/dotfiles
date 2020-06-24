@@ -85,12 +85,13 @@ if !has('gui_running')
 endif
 
 "use autocmd because setting colorscheme via 'let' doesn't load it properly (long left vertical bar is shaded)
-autocmd VimEnter * colorscheme solarized
+" autocmd VimEnter * colorscheme solarized
+autocmd VimEnter * colorscheme solarized8_dark
 " ========== Colorschemes ==========
 
 " ========== python ==========
 "
-" let g:python3_host_prog='/usr/local/bin/python3'
+let g:python3_host_prog='/usr/local/bin/python3'
 
 py << EOF
 import os.path
