@@ -291,8 +291,8 @@ set completeopt=menu
 "
 au FileType python setlocal completeopt-=preview
 set omnifunc=jedi#completions
-:inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
-:inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
+":inoremap <expr> j pumvisible() ? '<C-n>' : 'j'
+":inoremap <expr> k pumvisible() ? '<C-p>' : 'k'
 
 " ========== jedi-vim ==========
 
@@ -348,6 +348,9 @@ let g:loaded_python_provider = 1
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_completion_start_length = 1
 let g:deoplete#enable_debug=1
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 " ========== deoplete ==========
 
 " ========== vundle ==========
