@@ -3,8 +3,6 @@ if type nvim > /dev/null 2>&1; then
   alias vi='nvim'
 fi
 
-alias python=/usr/local/bin/python3
-
 alias b='berks'
 alias bu='berks upload'
 
@@ -44,3 +42,15 @@ alias l="exa -lahF -snew"
 alias find='fd'
 alias cpwd='pwd | pbcopy'
 alias vimdiff='nvim -d'
+unalias ts
+
+alias w='watson'
+alias ts='watson status'
+alias tl='watson log -G'
+alias trep='watson report'
+
+alias tup="python $HOME/github/people/saurabh-hirani/watson_coach/watson_coach.py > /tmp/task_tracking_status_right.txt 2>&1"
+alias tbd='watson stop; watson start break +distraction && tup'
+alias tstop='watson stop && tup' 
+alias tout='tstop ; watson report -d'
+alias cdl='dirs -v'

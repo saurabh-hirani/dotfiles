@@ -137,12 +137,70 @@ POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
 POWERLEVEL9K_SHORTEN_STRATEGY=truncate_folders
 POWERLEVEL9K_SHORTEN_DELIMITER=""
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv vcs)	
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_task_tracking_status_left dir rbenv vcs)	
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs custom_task_tracking_status_right)
 POWERLEVEL9K_MODE=”nerdfont-complete”
 POWERLEVEL9K_VCS_GIT_ALWAYS_SHOW_REMOTE_BRANCH='1' 
 #POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
 #POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
+
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT="custom_task_tracking_status_left"
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT_BACKGROUND="blue"
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT_FOREGROUND="black"
+
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT="custom_task_tracking_status_right"
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT_BACKGROUND="blue"
+POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT_FOREGROUND="black"
+
+SEGMENT_SEPARATOR=$'\ue0b0'
+LEFT_SEGMENT_SEPARATOR=$'\ue0b2'
+
+prompt_segment() {
+  local bg fg
+  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
+  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
+  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
+    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+  else
+    echo -n "%{$bg%}%{$fg%} "
+  fi
+  CURRENT_BG=$1
+  [[ -n $3 ]] && echo -n $3
+}
+
+prompt_end() {
+  if [[ -n $CURRENT_BG ]]; then
+    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+  else
+    echo -n "%{%k%}"
+  fi
+  echo -n "%{%f%}"
+  CURRENT_BG=''
+}
+
+custom_task_tracking_status_left() {
+  [[ -f /tmp/track.stop ]] || echo -n "$(cat /tmp/task_tracking_status_left.txt)"
+  # echo -n "%{%K{red}%}%{%F{black}%} 5050 %{%K{yellow}%}%{%F{black}%} 5050 %{%K{green}%}%{%F{black}%} 5050 %{%K{blue}%}%{%F{black}%} 50%% %{%K{red}%}%{%F{black}%} 60%%"
+
+  # bg="%K{red}"
+  # fg="%F{black}"
+  # echo -n "%{$bg%}%{$fg%} 5050 "
+   
+  # prompt_segment blue black "5050"
+  # prompt_end
+}
+
+custom_task_tracking_status_right() {
+  [[ -f /tmp/track.stop ]] || echo -n "$(cat /tmp/task_tracking_status_right.txt)"
+  # echo -n "%{%K{red}%}%{%F{black}%} 5050 %{%K{yellow}%}%{%F{black}%} 5050 %{%K{green}%}%{%F{black}%} 5050 %{%K{blue}%}%{%F{black}%} 50%% %{%K{red}%}%{%F{black}%} 60%%"
+
+  # bg="%K{red}"
+  # fg="%F{black}"
+  # echo -n "%{$bg%}%{$fg%} 5050 "
+   
+  # prompt_segment blue black "5050"
+  # prompt_end
+}
 
 set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 
@@ -188,7 +246,7 @@ set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions)
+plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions fd)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -225,7 +283,7 @@ setopt NO_BEEP
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # path
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/2.7/bin/:$PATH"
+export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/3.7/bin/:/usr/local/opt/mysql-client/bin:$PATH"
 
 export EDITOR='nvim'
 
@@ -250,15 +308,13 @@ alias toggle-prompt-color='toggle-powerlevel9k-color-scheme && reload_profile'
 alias toggle-prompt-color-all="toggle-powerlevel9k-color-scheme && tmux-send-cmd-to-all-windows 'reload_profile'"
 alias aws-clear-env='env | grep AWS | while read line; do var=$(echo $line|cut -f1 -d'='); echo $var; unset $var; done'
 alias aws-show-env='env | grep AWS'
-alias diffdir='diff -qr'
-alias perlpie='perl -pi -e'
 
 source ~/.aliasrc
 
 #complete -C '/usr/local/bin/aws_completer' aws
 source /usr/local/bin/aws_zsh_completer.sh
 
-export GOPATH=~/go/packages
+export GOPATH=$HOME/go/
 export PATH="$PATH:$GOPATH/bin"
 
 export LESSOPEN="|tar --to-stdout -zxf %s"
@@ -270,8 +326,8 @@ if [[ -f $MY_ENV_VARS_FILE ]]; then
 fi
 
 # powerline
-export POWERLINE_CONFIG_COMMAND="/usr/local/bin/powerline-config"
-source /usr/local/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
+export POWERLINE_CONFIG_COMMAND="$HOME/.pyenv/shims/powerline-config"
+source $HOME/.pyenv/versions/3.7.7/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
 
 tmux-send-keys-to-all-windows() {
   local keys=$1
@@ -305,7 +361,6 @@ tmux-env-set() {
   fi
   echo "$set_env_var_cmd" | tee -a $MY_ENV_VARS_FILE
 
-  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
 tmux-env-reload() {
@@ -332,6 +387,7 @@ show-knife-profile() {
 set-knife-profile() {
   local chef_env=$1
   tmux-env-set CHEF_ENV ${chef_env}
+  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
 aws-profiles() {
@@ -348,6 +404,9 @@ show-aws-profile() {
 set-aws-profile-local() {
   local aws_profile=$1
   profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
+  export AWS_PROFILE=${aws_profile} 
+  export AWS_ACCESS_KEY_ID="$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d'=' | tr -d ' ')"
+  export AWS_SECRET_ACCESS_KEY="$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   tmux-env-set AWS_PROFILE ${aws_profile} 
   tmux-env-set AWS_ACCESS_KEY_ID "$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   tmux-env-set AWS_SECRET_ACCESS_KEY "$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d'=' | tr -d ' ')"
@@ -357,8 +416,6 @@ set-aws-profile() {
   set-aws-profile-local $1
   tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
-
-
 
 # COMPLETION SETTINGS
 # source $MY_ENV_VARS_FILE.flushing 
@@ -392,11 +449,26 @@ export TRACKME_DISPLAY=true
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
+
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -f '/tmp/task_tracking_status_left.txt' ]] || touch /tmp/task_tracking_status_left.txt
+[[ -f '/tmp/task_tracking_status_right.txt' ]] || touch /tmp/task_tracking_status_right.txt
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
+
+[[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
+
+[[ -f ~/.zshrc.work ]] && source ~/.zshrc.work
+
+export PATH=$(printf "%s" "$PATH" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')
+
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
+# Thoughts
+echo "Few things, right things, brilliantly executed."
 
