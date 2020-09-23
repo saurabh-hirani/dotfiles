@@ -50,7 +50,15 @@ alias tl='watson log -G'
 alias trep='watson report'
 
 alias tup="python $HOME/github/people/saurabh-hirani/watson_coach/watson_coach.py > /tmp/task_tracking_status_right.txt 2>&1"
-alias tbd='watson stop; watson start break +distraction && tup'
+
 alias tstop='watson stop && tup' 
 alias tout='tstop ; watson report -d'
+
+alias twproj='watson stop; watson start work +project_work'
+alias twmeet='watson stop; watson start work +meeting'
+alias tbdist='watson stop; watson start break +distraction && tup'
+alias tblunch='watson stop; watson start break +lunch && tup'
+alias tbwork='watson stop; watson start break +work && tup'
+alias tctmp='watson stop; watson start career +tmp'
+
 alias cdl='dirs -v'

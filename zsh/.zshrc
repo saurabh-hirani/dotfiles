@@ -202,6 +202,14 @@ custom_task_tracking_status_right() {
   # prompt_end
 }
 
+function toggle-task-tracker() {
+  if [[ -f /tmp/track.stop ]]; then
+    rm /tmp/track.stop
+  else
+    touch /tmp/track.stop
+  fi
+}
+
 set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 
 # Uncomment the following line to use case-sensitive completion.
