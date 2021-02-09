@@ -1,0 +1,76 @@
+if type nvim > /dev/null 2>&1; then
+  alias vim='nvim'
+  alias vi='nvim'
+fi
+
+alias b='berks'
+alias bu='berks upload'
+
+alias d='docker'
+
+alias k='kitchen'
+alias kd='kitchen destroy'
+alias kc='kitchen converge'
+alias kdc='kitchen destroy && kitchen converge'
+
+alias t='terraform'
+
+alias vin='vi ~/notes/notes.txt'
+
+alias whatsmyip='curl ipinfo.io/ip'
+
+alias jsonflatten='pyfunc -m pyfunc.utils.json_flatten'
+alias jsonview='python -m json.tool'
+
+alias gitpom='git push origin master'
+alias gitcwip='git commit -m "work in progress" && branch=$(git rev-parse --abbrev-ref HEAD) && git push origin $branch'
+alias gitcread='git commit -m "updated readme" && gitpom'
+alias gitcminor='git commit -m "minor edits" && gitpom'
+alias gitcnotes='git commit -m "updated notes" && gitpom'
+
+alias weather-baroda='curl wttr.in/vadodara'
+alias datecurr="date +%e"
+alias ipython='ipython --TerminalInteractiveShell.editing_mode=vi'
+alias jqig="jq -R '. as $raw | try fromjson catch $raw'"
+
+alias cat='bat --style=plain'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+alias ls='exa'
+alias l="exa -lahF -snew"
+
+alias find='fdfind'
+alias cpwd='pwd | pbcopy'
+alias vimdiff='nvim -d'
+
+alias w='watson'
+alias tstatus='watson status'
+alias tlog='watson log -G'
+alias tstop='watson stop && tup' 
+
+alias tup='python /Users/hiranis/github/people/saurabh-hirani/watson_coach/watson_coach.py > /tmp/task_tracking_status_right.txt 2>&1'
+
+alias tw='watson stop; watson start work'
+alias twproj='watson stop; watson start work +project_work'
+alias twmeet='watson stop; watson start work +meeting'
+
+alias tb='watson stop; watson start break'
+alias tbdist='watson stop; watson start break +distraction && tup'
+alias tbtension='watson stop; watson start break +tension && tup'
+alias tblunch='watson stop; watson start break +lunch && tup'
+alias tbwork='watson stop; watson start break +work && tup'
+
+alias tc='watson stop; watson start career'
+alias tctmp='watson stop; watson start career +tmp'
+alias tct1='watson stop; watson start career +t1'
+
+alias btk='echo "\`"'
+alias cdl='dirs -v'
+alias fix-bracketed-paste="printf '\e[?2004l'"
+alias echo-fix-bracketed-paste="echo printf '\\e\[\?2004l'"
+
+alias grep='ag'
+alias grin='ag -rin'
+
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
