@@ -504,6 +504,8 @@ eval "$(pyenv init -)"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
+eval "$(hub alias -s)"
+
 export RBENV_ROOT="/usr/local/rbenv"
 if [ -d "${RBENV_ROOT}" ]; then
   export PATH="${RBENV_ROOT}/bin:${PATH}"
@@ -514,4 +516,5 @@ export PATH="${RBENV_ROOT}/bin:$HOME/.local/bin:${PATH}:/home/saurabh/github/sau
 export PATH="$HOME/.tfenv/bin:$PATH"
 # Thoughts
 echo "Few things, right things, brilliantly executed."
+
 
