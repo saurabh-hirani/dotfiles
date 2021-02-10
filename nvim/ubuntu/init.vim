@@ -522,11 +522,7 @@ map <leader>t :silent! !ctags -R -o ~/mytags .<CR>
 Bundle 'gmarik/Vundle.vim'
 Bundle 'bronson/vim-trailing-whitespace'
 
-" edit crontab on mac
-autocmd filetype crontab setlocal nobackup nowritebackup
-
-" to make copy-paste work in mac - this is simply awesome
-set clipboard=unnamed
+set clipboard=unnamedplus
 " ========== Misc ==========
 
 """"" Tips """""""
