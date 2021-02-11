@@ -424,9 +424,17 @@ show-aws-account() {
 
 show-aws-profile() {
   local aws_profile=$1
-  profile_data=$(cat ~/.aws/credentials | grep "\[$aws_profile\]" -A4)  
+  profile_data=$(cat ~/.aws/credentials | \grep "\[$aws_profile\]" -A4)  
+  echo $profile_data | \grep '#' | tr ' ' '\n' | while read token; do 
+    if echo $token | \grep -q '#'; then continue; fi
+    key=$(echo $token | cut -f1 -d ':' | tr '[a-z]' '[A-Z]')
+    value=$(echo $token | cut -f2 -d ':')
+    echo "$key: $value"
+  done
+  echo
   echo AWS_PROFILE=${aws_profile} 
-  echo AWS_ACCESS_KEY_ID="$(echo $profile_data | grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')"  AWS_SECRET_ACCESS_KEY="$(echo $profile_data | grep aws_secret_access_key | cut -f2 -d'=' | tr -d ' ')"
+  echo AWS_ACCESS_KEY_ID="$(echo $profile_data | \grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')" 
+  echo AWS_SECRET_ACCESS_KEY="$(echo $profile_data | \grep aws_secret_access_key | cut -f2 -d'=' | tr -d ' ')"
 }
 
 set-aws-profile-local() {
