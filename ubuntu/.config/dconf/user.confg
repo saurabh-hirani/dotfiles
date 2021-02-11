@@ -85,8 +85,10 @@ secondary-color='#2c160a'
 allow-volume-above-100-percent=false
 
 [org/gnome/desktop/wm/keybindings]
-switch-windows=['<Primary>Tab']
-switch-windows-backward=['<Primary><Shift>Tab']
+switch-applications=@as []
+switch-applications-backward=@as []
+switch-windows=['<Super>Tab']
+switch-windows-backward=['<Shift><Super>Tab']
 
 [org/gnome/eog/view]
 background-color='rgb(0,0,0)'
