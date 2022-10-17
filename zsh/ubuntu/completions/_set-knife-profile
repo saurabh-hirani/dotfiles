@@ -1,0 +1,16 @@
+#compdef set-knife-profile
+
+_set-knife-profile() { 
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments '1: :->csi'
+
+    case $state in
+    csi)
+      _arguments "1: :($(knife-profiles))"
+    ;;
+    esac
+}
+
+_set-knife-profile "$@"

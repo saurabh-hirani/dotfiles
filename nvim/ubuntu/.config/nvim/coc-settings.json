@@ -1,0 +1,52 @@
+{
+    "coc.preferences.useQuickfixForLocations": true,
+    "python.analysis.logLevel": "Information",
+    "coc.preferences.formatOnSaveFiletypes": [
+        "css",
+        "markdown",
+        "javascript",
+        "graphql",
+        "html",
+        "yaml",
+        "json",
+        "python"
+    ],
+    "pyright.enable": true,
+    "python.pythonPath": "/home/saurabh/.pyenv/shims/python",
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "/home/saurabh/.pyenv/shims/black",
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": [
+        "--max-line-length",
+        "119"
+    ],
+    "languageserver": {
+        "golang": {
+            "command": "gopls",
+            "rootPatterns": [
+                "go.mod",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "filetypes": [
+                "go"
+            ]
+        },
+        "terraform": {
+            "command": "terraform-ls",
+            "args": [
+                "serve"
+            ],
+            "filetypes": [
+                "terraform",
+                "tf"
+            ],
+            "initializationOptions": {},
+            "settings": {}
+        }
+    }
+}

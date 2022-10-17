@@ -1,0 +1,7 @@
+[FORMAT]
+indent-string='    '
+
+
+[MESSAGES CONTROL]
+# ignore W0311 to ignore 2 v/s 4 indentation
+disable=W0613,C0330,E127,W0312

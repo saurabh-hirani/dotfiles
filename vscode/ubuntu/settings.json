@@ -1,0 +1,206 @@
+{
+    "terminal.integrated.fontFamily": "monospace, PowerlineSymbols",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.integrated.cursorBlinking": false,
+    "terminal.integrated.enableBold": true,
+    "terminal.integrated.fontSize": 12,
+    "terminal.integrated.rightClickCopyPaste": true,
+    "workbench.colorCustomizations": {},
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "sync.gist": "xxxxx",
+    "sync.quietSync": false,
+    "sync.removeExtensions": true,
+    "sync.syncExtensions": true,
+    "sync.autoDownload": false,
+    "sync.autoUpload": false,
+    "sync.forceDownload": false,
+    "explorer.sortOrder": "type",
+    "workbench.editor.showTabs": true,
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "vim.enableNeovim": true,
+    "vim.handleKeys": {
+        "<C-w>": false
+    },
+    "vim.insertModeKeyBindings": [
+        {
+            "before": [
+                "j",
+                "j"
+            ],
+            "after": [
+                "<Esc>"
+            ]
+        }
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        {
+            "before": [
+                "<leader>",
+                "m"
+            ],
+            "commands": [
+                "bookmarks.toggle"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "b"
+            ],
+            "commands": [
+                "bookmarks.list"
+            ]
+        }
+    ],
+    "vim.foldfix": true,
+    "vim.useSystemClipboard": true,
+    "workbench.colorTheme": "Nord",
+    "materialTheme.fixIconsRunning": false,
+    "workbench.editor.enablePreview": true,
+    "window.title": "${activeEditorLong}${separator}${rootName}",
+    "http.proxyStrictSSL": false,
+    "vim.neovimPath": "/usr/bin/nvim",
+    "typescript.tsc.autoDetect": "off",
+    "grunt.autoDetect": "off",
+    "jake.autoDetect": "off",
+    "gulp.autoDetect": "off",
+    "npm.autoDetect": "off",
+    "files.associations": {
+        "*.tf": "terraform",
+        "*.go": "go",
+        "*.tpl": "html",
+        "*.json.tpl": "json",
+        "*.tmp": "html",
+        "*.master": "html",
+        "*.html": "html"
+    },
+    "breadcrumbs.enabled": true,
+    "editor.parameterHints.enabled": false,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "vsicons.dontShowNewVersionMessage": true,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "workbench.list.automaticKeyboardNavigation": false,
+    "sync.forceUpload": false,
+    "terraform.indexing": {
+        "enabled": false,
+        "liveIndexing": false,
+        "delay": 500,
+        "exclude": [
+            ".terraform/**/*",
+            "**/.terraform/**/*"
+        ]
+    },
+    "terraform.languageServer": {
+        "external": true,
+        "args": [
+            "serve"
+        ]
+    },
+    "terraform.formatOnSave": true,
+    "terraform.formatVarsOnSave": true,
+    "terraform.format": {
+        "ignoreExtensionsOnSave": [
+            ".tfsmurf"
+        ]
+    },
+    "shellcheck.executablePath": "shellcheck",
+    "html.format.indentInnerHtml": true,
+    "html.format.indentHandlebars": true,
+    "workbench.iconTheme": "vscode-icons",
+    "editor.largeFileOptimizations": false,
+    "python.linting.flake8Path": "/home/saurabh/.pyenv/shims/flake8",
+    "python.formatting.blackPath": "/home/saurabh/.pyenv/shims/black",
+    "python.linting.enabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--config=/home/saurabh/pyproject.toml"
+    ],
+    "go.formatTool": "goimports",
+    "go.useLanguageServer": false,
+    "go.autocompleteUnimportedPackages": true,
+    "go.docsTool": "gogetdoc",
+    "go.gopath": "/home/saurabh/go/",
+    "go.delveConfig": {
+        "useApiV1": false,
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 3,
+            "maxStringLen": 400,
+            "maxArrayValues": 400,
+            "maxStructFields": -1
+        }
+    },
+    "[go]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        }
+    },
+    "[go.mod]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+    },
+    "go.toolsEnvVars": {
+        "GO111MODULE": "on"
+    },
+    "gopls": {
+        "verboseOutput": false,
+        "experimentalWorkspaceModule": true,
+        "usePlaceholders": true,
+        "completeUnimported": true,
+        "deepCompletion": true,
+    },
+    "files.eol": "\n",
+    "editor.smoothScrolling": true,
+    "terminal.integrated.shell.osx": "/bin/zsh",
+    "terminal.integrated.macOptionClickForcesSelection": true,
+    "emeraldwalk.runonsave": {
+        "autoClearConsole": true,
+        "shell": "/bin/zsh",
+        "commands": [
+            {
+                "match": "\\.tf",
+                "cmd": "export AWS_REGION=us-east-1 && cd ${fileDirname} && terraform validate -no-color"
+            }
+        ]
+    },
+    "editor.tabCompletion": "on",
+    "editor.showFoldingControls": "always",
+    "editor.folding": true,
+    "editor.foldingStrategy": "indentation",
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.useCodeSnippetsOnFunctionSuggestWithoutType": true,
+    "terminal.integrated.copyOnSelection": true,
+    "cSpell.userWords": [],
+    "explorer.confirmDelete": false,
+    "editor.accessibilitySupport": "off",
+    "vs-kubernetes": {
+        "vs-kubernetes.minikube-path.mac": "/Users/hiranis/.vs-kubernetes/tools/minikube/darwin-amd64/minikube"
+    },
+    "editor.lineNumbers": "on",
+    "editor.minimap.enabled": false,
+    "workbench.statusBar.visible": true,
+    "workbench.activityBar.visible": false,
+    "cSpell.enabled": false,
+    "cSpell.ignoreRegExpList": [
+        ".*"
+    ],
+    "window.zoomLevel": 1,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
+}

@@ -1,0 +1,63 @@
+{
+  "coc.preferences.useQuickfixForLocations": true,
+  "python.analysis.logLevel": "Information",
+  "python.pythonPath": "/opt/homebrew/opt/python/libexec/bin/python",
+  "python.formatting.provider": "black",
+  "python.formatting.blackPath": "/opt/homebrew/bin/black",
+  "python.formatting.blackArgs": [
+    "--config",
+    "/Users/saurabhhirani/.config/black/pyproject.toml"
+  ],
+  "pyright.enable": true,
+  "pyright.inlayHints.variableTypes": false,
+  "python.linting.enabled": true,
+  "python.linting.lintOnSave": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--config",
+    "/Users/saurabhhirani/.flake8"
+  ],
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--config",
+    "/Users/saurahirani/.config/pylint/.pylintrc",
+    "--max-line-length",
+    "119"
+  ],
+  "coc.preferences.formatOnSaveFiletypes": [
+    "python",
+    "css",
+    "markdown",
+    "javascript",
+    "graphql",
+    "html",
+    "yaml",
+    "json"
+  ],
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": [
+        "go.mod",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "filetypes": [
+        "go"
+      ]
+    },
+    "terraform": {
+      "command": "terraform-ls",
+      "args": [
+        "serve"
+      ],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
+    }
+  }
+}
