@@ -99,16 +99,16 @@ let g:gitgutter_highlight_linenrs = 1
 " ========== gitgutter ==========
 
 " ========== fugitive ==========
-nnoremap <space>gd :Gdiffsplit<CR>
-nnoremap <space>gb :Gblame<CR>
-nnoremap <space>gs :Gstatus<CR>
+nnoremap <space>gd :Git diffsplit<CR>
+nnoremap <space>gb :Git blame<CR>
+nnoremap <space>gs :Git status<CR>
 nnoremap <space>guno :Git status -uno .<CR>
 nnoremap <space>gl :Git log<CR>
 nnoremap <space>go :Git checkout<Space>
 nnoremap <space>ga :Git add %:p<CR><CR>
-nnoremap <space>gcc :Gcommit -v -q<CR>
-nnoremap <space>gco :Gread<CR>
-nnoremap <space>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <space>gcc :Git commit -v -q<CR>
+nnoremap <space>gco :Git read<CR>
+nnoremap <space>gl :silent! Git log<CR>:bot copen<CR>
 nnoremap <space>gps :Git push<CR>
 "nnoremap <space>gps :Dispatch! git push<CR>
 " ========== fugitive ==========
@@ -375,7 +375,7 @@ Bundle 'fisadev/vim-isort'
 " ========== vundle ==========
 
 " ========== 80col ==========
-autocmd FileType python set colorcolumn=80
+autocmd FileType python set colorcolumn=119
 autocmd FileType ruby set colorcolumn=80
 autocmd FileType text set colorcolumn=80
 autocmd FileType python set sw=4 ts=4
@@ -559,12 +559,25 @@ command! -bang -nargs=* Ag call fzf#vim#grep('ag --column --numbers --noheading 
 map <Leader>g :Ag
 "======== fzf ===========
 
+"========== ack =============
+Bundle 'mileszs/ack.vim'
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
+let g:ackpreview = 0
+let g:ack_apply_lmappings = 0
+let g:ack_apply_qmappings = 0
+"========== ack =============
+
 Bundle "yegappan/mru"
 Bundle "tpope/vim-obsession"
 
 " Run nvim as
 " nvim --headless "+call firenvim#install(0) | q"
 Bundle "glacambre/firenvim"
+
 
 " ========== vundle ==========
 call vundle#end()
