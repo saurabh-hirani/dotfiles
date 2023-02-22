@@ -572,11 +572,14 @@ export FZF_CTRL_T_COMMAND="fd -t f --hidden --follow --exclude \".git\" ."
 # fzf single quote tab completion behavior
 export FZF_COMPLETION_TRIGGER="'"
 
+export FZF_PREVIEW_COMMAND="COLORTERM=truecolor bat --style=numbers --color=always {}"
+
 _fzf_compgen_path() {
-fd --type f --hidden --follow --exclude .git . "$1"
+  fd --type f --hidden --follow --exclude .git . "$1"
 }
+
 _fzf_compgen_dir() {
-fd --type d . "$1"
+  fd --type d . "$1"
 }
 
 # allow vim save via ctrl-s
