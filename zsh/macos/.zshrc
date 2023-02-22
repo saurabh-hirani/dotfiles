@@ -574,6 +574,12 @@ export FZF_COMPLETION_TRIGGER="'"
 
 export FZF_PREVIEW_COMMAND="COLORTERM=truecolor bat --style=numbers --color=always {}"
 
+function vif() {
+    local fname
+    fname=$(fzf) || return
+    vim "$fname"
+}
+
 _fzf_compgen_path() {
   fd --type f --hidden --follow --exclude .git . "$1"
 }
