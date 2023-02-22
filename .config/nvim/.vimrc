@@ -499,8 +499,9 @@ Bundle 'bronson/vim-trailing-whitespace'
 Bundle 'junegunn/fzf'
 Bundle 'junegunn/fzf.vim'
 Bundle 'wincent/command-t'
-let g:fzf_layout = { 'down': '20' }
-"let g:fzf_preview_window = ['right,20', 'ctrl-/']
+"let g:fzf_layout = { 'down': '20' }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8, 'yoffset':5, 'xoffset': 5, 'relative': v:true, 'highlight': 'TODO'} }
+
 
 let g:CommandTPreferredImplementation='lua'
 
@@ -580,7 +581,7 @@ Bundle "tpope/vim-obsession"
 
 " Run nvim as
 " nvim --headless "+call firenvim#install(0) | q"
-Bundle "glacambre/firenvim"
+  Bundle "glacambre/firenvim"
 
 
 " ========== vundle ==========
