@@ -397,7 +397,7 @@ tmux-env-set() {
   local set_env_var_cmd="export $var_name=$var_value"
   local set_env_var_regex="^${set_env_var_cmd}$"
 
-  local curr_value=$(\egrep "$set_env_var_regex" $MY_ENV_VARS_FILE)
+  local curr_value=$(\grep -E "$set_env_var_regex" $MY_ENV_VARS_FILE)
   if ! [[ $? -eq 0 ]]; then
     #egrep -v "$set_env_var_regex" $MY_ENV_VARS_FILE > $MY_ENV_VARS_FILE.tmp ; mv $MY_ENV_VARS_FILE.tmp  $MY_ENV_VARS_FILE
     echo "unset $var_name"  | tee -a  $MY_ENV_VARS_FILE
@@ -412,7 +412,7 @@ tmux-env-reload() {
 }
 
 tmux-env-flush() {
-  \egrep '^export' $MY_ENV_VARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
+  \grep -E '^export' $MY_ENV_VARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
     echo "unset $var_name"
   done | tee $MY_ENV_VARS_FILE.flushing
   tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE.flushing"
@@ -561,7 +561,7 @@ setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 export FZF_BASE="/usr/bin/fzf"
 # to overcome vscode existng ctrl+k, ctrl+j bindings
 #
-export FZF_DEFAULT_OPTS='-m --bind=ctrl-w:up,ctrl-o:down'
+export FZF_DEFAULT_OPTS="-m --bind=ctrl-w:up,ctrl-o:down --history=$HOME/.fzf_history"
 
 bindkey "¸" fzf-cd-widget
 export FZF_ALT_C_COMMAND="fd -t d --hidden --follow --exclude \".git\" ."
