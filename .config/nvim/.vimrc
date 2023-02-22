@@ -499,6 +499,9 @@ Bundle 'bronson/vim-trailing-whitespace'
 Bundle 'junegunn/fzf'
 Bundle 'junegunn/fzf.vim'
 Bundle 'wincent/command-t'
+let g:fzf_layout = { 'down': '20' }
+"let g:fzf_preview_window = ['right,20', 'ctrl-/']
+
 let g:CommandTPreferredImplementation='lua'
 
 set clipboard=unnamed
@@ -554,9 +557,9 @@ command! -bang -nargs=? -complete=dir RepoFiles call fzf#vim#files('/Users/saura
 
 source ~/.vimrc.work
 
-command! -bang -nargs=* Ag call fzf#vim#grep('ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,  fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Ag call fzf#vim#grep('ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,  fzf#vim#with_preview('right:60%'), <bang>0)
 
-map <Leader>g :Ag
+map <Leader>g :Ag<Space>
 "======== fzf ===========
 
 "========== ack =============
@@ -564,8 +567,9 @@ Bundle 'mileszs/ack.vim'
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
 cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
+nnoremap <Leader>c :Ack!<Space>
 let g:ackpreview = 0
 let g:ack_apply_lmappings = 0
 let g:ack_apply_qmappings = 0
