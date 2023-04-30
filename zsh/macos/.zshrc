@@ -378,12 +378,14 @@ tmux-send-keys-to-all-panes() {
 
 tmux-send-cmd-to-all-windows() {
   local cmd=$1
-  tmux-send-keys-to-all-windows "$cmd "
+  tmux-send-keys-to-all-windows "$cmd 
+"
 }
 
 tmux-send-cmd-to-all-panes() {
   local cmd=$1
-  tmux-send-keys-to-all-panes "$cmd "
+  tmux-send-keys-to-all-panes "$cmd 
+"
 }
 
 tmux-env-set() {
@@ -605,3 +607,12 @@ export TODOTXT_DEFAULT_ACTION=ls
 echo "Few things, right things, brilliantly executed."
 
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/saurabhhirani/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/saurabhhirani/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/saurabhhirani/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/saurabhhirani/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+
+export PYTHONSTARTUP=$HOME/.pythonstartup
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
