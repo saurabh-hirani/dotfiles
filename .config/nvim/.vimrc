@@ -19,6 +19,7 @@ inoremap <leader>x <C-x><C-o>
 " Reload vim
 nnoremap <leader>ev :split $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+
 " Reload file when changed on disk
 set autoread | au CursorHold * checktime | call feedkeys("lh")
 
@@ -36,23 +37,37 @@ set t_ut=
 autocmd GUIEnter * set vb t_vb=
 autocmd BufEnter * syntax sync fromstart
 abb xybtk `
+" ========== Global config ==========
+
 " Prevent auto indenting for yaml comments
 autocmd FileType yaml,yaml.ansible setlocal indentkeys-=0#
 
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-repeat'
-
-" Use for quoting
-Bundle 'tpope/vim-surround'
-" ds" to remove quote
-map <leader>" ysiW"
-
+" ========== vim-commentary ==========
 " Use gcc to comment out a line (takes a count)
 " gc to comment out the target of a motion (for example, gcap to comment out a paragraph)
 " gc in visual mode to comment out the selection
 " gc in operator pending mode to target a comment.
 " You can also use it as a command, either with a range like :7,17Commentary, or as part of a :global invocation like with :g/TODO/Commentary.
-" ========== Global config ==========
+Bundle 'tpope/vim-commentary'
+autocmd FileType apache setlocal commentstring=#\ %s
+autocmd FileType text setlocal commentstring=#\ %s
+" ========== vim-commentary ==========
+
+" ========== vim-repeat ==========
+" examples - https://catonmat.net/vim-plugins-repeat-vim
+Bundle 'tpope/vim-repeat'
+" ========== vim-repeat ==========
+
+" ========== vim-surround ==========
+" examples - https://catonmat.net/vim-plugins-surround-vim
+" ds  - delete a surrounding - e.g ds"
+" cs  - change a surrounding - e.g. cs"'
+" ys  - add a surrounding - e.g ys"
+" yss - add a surrounding to the whole line e.g yss"
+Bundle 'tpope/vim-surround'
+" ds" to remove quote
+map <leader>" ysW"
+" ========== vim-surround ==========
 
 
 " ========== Filetypes ==========
@@ -68,6 +83,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
 " Run - cp /home/saurabh/.vim/bundle/nord-vim/colors/nord.vim ~/.config/nvim/colors
 Bundle 'arcticicestudio/nord-vim'
+Bundle 'tomasiser/vim-code-dark'
 
 let g:rehash256 = 1
 let g:loaded_python_provider = 1
@@ -88,14 +104,35 @@ endif
 set t_Co=256
 set updatetime=2000
 
+if &term =~ '256color'
+    " Disable Background Color Erase (BCE) so that color schemes
+    " work properly when Vim is used inside tmux and GNU screen.
+    set t_ut=
+endif
+" ========== Colorschemes ==========
+
+
 " ========== gitgutter ==========
+" later - check https://github.com/mhinz/vim-signify in case of perf issues
+" examples - https://www.youtube.com/watch?v=SLQWQ_R4bRI&ab_channel=BrodieRobertson
 nnoremap <space>ggd :GitGutterDisable<CR>
 nnoremap <space>gge :GitGutterEnable<CR>
 nnoremap <space>ggt :GitGutterLineHighlightsToggle<CR>
 nnoremap <space>ggl :GitGutterLineNrHighlightsToggle<CR>
-let g:gitgutter_enabled = 0
+nnoremap <space>ggf :GitGutterFold<CR>
+
+highlight GitGutterAdd guifg=#009900 ctermfg=Green
+highlight GitGutterChange guifg=#bbbb00 ctermfg=Yellow
+highlight GitGutterDelete guifg=#ff2222 ctermfg=Red
+
+let g:gitgutter_enabled = 1
+let g:gitgutter_map_keys = 0
 let g:gitgutter_highlight_lines = 0
 let g:gitgutter_highlight_linenrs = 1
+
+nmap ) <Plug>(GitGutterNextHunk)
+nmap ( <Plug>(GitGutterPrevHunk)
+
 " ========== gitgutter ==========
 
 " ========== fugitive ==========
@@ -392,10 +429,11 @@ au BufRead,BufNewFile *.tfvars set filetype=terraform
 au BufRead,BufNewFile *.tf set filetype=terraform
 au BufRead,BufNewFile *.hcl set filetype=terraform
 let g:terraform_align=1
-let g:terraform_fmt_on_save = 1
-autocmd BufWritePre *.hcl :normal gg=G``<CR>
-autocmd BufWritePre *.hcl.tpl :normal gg=G``<CR>
-autocmd FileType terraform setlocal commentstring=//%s
+let g:terraform_fmt_on_save = 0
+" let g:terraform_fmt_on_save = 1
+" autocmd BufWritePre *.hcl :normal gg=G``<CR>
+" autocmd BufWritePre *.hcl.tpl :normal gg=G``<CR>
+" autocmd FileType terraform setlocal commentstring=//%s
 
 " ========== terraform ==========
 
@@ -578,11 +616,6 @@ let g:ack_apply_qmappings = 0
 
 Bundle "yegappan/mru"
 Bundle "tpope/vim-obsession"
-
-" Run nvim as
-" nvim --headless "+call firenvim#install(0) | q"
-  Bundle "glacambre/firenvim"
-
 
 " ========== vundle ==========
 call vundle#end()
