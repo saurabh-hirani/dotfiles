@@ -15,7 +15,9 @@
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": [
     "--config",
-    "/Users/saurabhhirani/.flake8"
+    "/Users/saurabhhirani/.flake8",
+    "--max-line-length",
+    "119"
   ],
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": [
