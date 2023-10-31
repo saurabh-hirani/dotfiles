@@ -21,10 +21,8 @@
   ],
   "python.linting.pylintEnabled": true,
   "python.linting.pylintArgs": [
-    "--config",
-    "/Users/saurahirani/.config/pylint/.pylintrc",
-    "--max-line-length",
-    "119"
+    "--rcfile",
+    "/Users/saurabhhirani/.config/pylint/.pylintrc"
   ],
   "coc.preferences.formatOnSaveFiletypes": [
     "python",
