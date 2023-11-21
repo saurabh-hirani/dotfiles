@@ -109,6 +109,7 @@ if &term =~ '256color'
     " work properly when Vim is used inside tmux and GNU screen.
     set t_ut=
 endif
+colorscheme nord
 " ========== Colorschemes ==========
 
 
@@ -125,7 +126,7 @@ highlight GitGutterAdd guifg=#009900 ctermfg=Green
 highlight GitGutterChange guifg=#bbbb00 ctermfg=Yellow
 highlight GitGutterDelete guifg=#ff2222 ctermfg=Red
 
-let g:gitgutter_enabled = 1
+let g:gitgutter_enabled = 0
 let g:gitgutter_map_keys = 0
 let g:gitgutter_highlight_lines = 0
 let g:gitgutter_highlight_linenrs = 1
@@ -136,11 +137,11 @@ nmap ( <Plug>(GitGutterPrevHunk)
 " ========== gitgutter ==========
 
 " ========== fugitive ==========
-nnoremap <space>gd :Git diffsplit<CR>
+nnoremap <space>gd :Git diff<CR>
 nnoremap <space>gb :Git blame<CR>
 nnoremap <space>gs :Git status<CR>
-nnoremap <space>guno :Git status -uno .<CR>
 nnoremap <space>gl :Git log<CR>
+nnoremap <space>guno :Git status -uno .<CR>
 nnoremap <space>go :Git checkout<Space>
 nnoremap <space>ga :Git add %:p<CR><CR>
 nnoremap <space>gcc :Git commit -v -q<CR>
@@ -150,9 +151,6 @@ nnoremap <space>gps :Git push<CR>
 "nnoremap <space>gps :Dispatch! git push<CR>
 " ========== fugitive ==========
 "
-" ========== Colorschemes ==========
-colorscheme nord
-" ========== Colorschemes ==========
 
 " ========== python ==========
 let g:python3_host_prog='/opt/homebrew/opt/python/libexec/bin/python'
@@ -234,6 +232,8 @@ Bundle 'scrooloose/nerdtree'
 map <leader>nt :NERDTreeToggle<CR>
 map <leader>O :NERDTreeFind<CR>
 map <leader>r :NERDTreeFind<cr>
+" when done with vpslit work keep focus in window other than the one you want to quite and do - ctrl + w
+" + o
 nmap vv :vsplit<CR>
 let NERDTreeShowHidden=1
 " o - open file in current window and shift focus
@@ -340,28 +340,28 @@ let g:substitute_SingleWordSize = -1
 
 " ========== neomake ==========
 " to run linters
-Bundle "neomake/neomake"
-
-" Run NeoMake on read and write operations
-autocmd! BufReadPost,BufWritePost * Neomake
-
-let g:neomake_serialize = 1
-let g:neomake_serialize_abort_on_error = 1
-
-" (Optional)Remove Info(Preview) window
-set completeopt-=preview
-
-" (Optional)Hide Info(Preview) window after completions
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-" increase verbosity for debugging
-" let g:neomake_verbose=3
-" let g:neomake_logfile='/var/tmp/neomake.log'
-
-" pylint options are better set in ~/.pylintrc
-let g:neomake_python_enabled_makers = ['flake8', 'pylint']
-let g:neomake_json_enabled_makers = ['jsonlint']
+"Bundle "neomake/neomake"
+"
+"" Run NeoMake on read and write operations
+"autocmd! BufReadPost,BufWritePost * Neomake
+"
+"let g:neomake_serialize = 1
+"let g:neomake_serialize_abort_on_error = 1
+"
+"" (Optional)Remove Info(Preview) window
+"set completeopt-=preview
+"
+"" (Optional)Hide Info(Preview) window after completions
+"autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+"autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+"
+"" increase verbosity for debugging
+"" let g:neomake_verbose=3
+"" let g:neomake_logfile='/var/tmp/neomake.log'
+"
+"" pylint options are better set in ~/.pylintrc
+"let g:neomake_python_enabled_makers = ['flake8', 'pylint']
+"let g:neomake_json_enabled_makers = ['jsonlint']
 " ========== neomake ==========
 
 " ========== coc ==========
@@ -616,6 +616,8 @@ let g:ack_apply_qmappings = 0
 
 Bundle "yegappan/mru"
 Bundle "tpope/vim-obsession"
+Bundle 'iamcco/markdown-preview.nvim'
+
 
 " ========== vundle ==========
 call vundle#end()
@@ -632,4 +634,7 @@ syntax on
 " source /var/tmp/buffers.vim
 " shift+zz to save and quit
 " q/p - to search for yanked text
+" let @+=@% - copy current file path into buffer
 " ========== Tips ==========
+"
+"
