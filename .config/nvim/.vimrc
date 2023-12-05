@@ -365,6 +365,7 @@ let g:substitute_SingleWordSize = -1
 " ========== neomake ==========
 
 " ========== coc ==========
+" Install diagnostic extension - :CocInstall coc-diagnostic
 Bundle "neoclide/coc.nvim"
 
 " GoTo code navigation.
