@@ -67,6 +67,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-surround'
 " ds" to remove quote
 map <leader>" ysW"
+map <leader>X ysW`
 " ========== vim-surround ==========
 
 
@@ -625,17 +626,25 @@ call vundle#end()
 syntax on
 
 " ========== Tips ==========
-" :g/pattern/d - delete all lines matching pattern
-" :3,12g/pattern/d - delete all lines matching pattern from 3 to 12
-" :.,$g/pattern/d - delete all lines matching pattern from current to end
-" use gd to go to function definition if the function defined in the same file
+"
 " links to help out with mass edits
 " http://stackoverflow.com/questions/2024443/saving-vim-macros
 " http://www.nyayapati.com/srao/2013/08/run-a-macro-in-all-buffers-in-vim/
 " source /var/tmp/buffers.vim
-" shift+zz to save and quit
-" q/p - to search for yanked text
-" let @+=@% - copy current file path into buffer
-" ========== Tips ==========
 "
+" :g/pattern/d - delete all lines matching pattern
+" :3,12g/pattern/d - delete all lines matching pattern from 3 to 12
+" :.,$g/pattern/d - delete all lines matching pattern from current to end
+" gd  - go to function definition if the function defined in the same file
+" shift+zz - save and quit
+" esc + q/p - to search for yanked text
+" let @+=@% - copy current file path into buffer
+" ctrl + o - navigate to previous
+" ctrl + i - navigate to previous
+" g; - go to the previous change location
+" g, - go to the newer change location
+" gi - place the cursor at the same position where it was left last time in the Insert mode
+" zg - add word to dictionary
+" z= - check work spelling
+" ========== Tips ==========
 "
