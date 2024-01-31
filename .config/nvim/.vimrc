@@ -201,7 +201,7 @@ au BufRead,BufNewFile *.go set filetype=go
 
 Plugin 'fatih/vim-go'
 Bundle 'fatih/molokai'
-
+"
 au FileType go nmap <leader>r <Plug>(go-run)
 "au FileType go nmap <leader>b <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
@@ -219,6 +219,7 @@ au FileType go nmap <Leader>s <Plug>(go-implements)
 au FileType go nmap <Leader>i <Plug>(go-info)
 au FileType go nmap <Leader>e <Plug>(go-rename)
 
+let g:go_def_mapping_enabled = 0
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
@@ -372,10 +373,11 @@ Bundle "neoclide/coc.nvim"
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <Leader>d :CocDiagnostics<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -393,7 +395,6 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-nnoremap <Leader>d :CocDiagnostics<CR>
 
 let g:coc_filetype_map = {
       \ 'py': 'python'
