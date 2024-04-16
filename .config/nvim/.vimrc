@@ -203,7 +203,7 @@ Plugin 'fatih/vim-go'
 Bundle 'fatih/molokai'
 "
 au FileType go nmap <leader>r <Plug>(go-run)
-"au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>yb <Plug>(go-build)
 au FileType go nmap <leader>t <Plug>(go-test)
 au FileType go nmap <leader>c <Plug>(go-coverage)
 
@@ -619,8 +619,36 @@ let g:ack_apply_qmappings = 0
 
 Bundle "yegappan/mru"
 Bundle "tpope/vim-obsession"
-Bundle 'iamcco/markdown-preview.nvim'
+Bundle "iamcco/markdown-preview.nvim"
 
+"============ cmp ============
+Plugin 'neovim/nvim-lspconfig'
+Plugin 'hrsh7th/cmp-nvim-lsp'
+Plugin 'hrsh7th/cmp-buffer'
+Plugin 'hrsh7th/cmp-path'
+Plugin 'hrsh7th/cmp-cmdline'
+Plugin 'hrsh7th/nvim-cmp'
+
+" For vsnip users.
+" Plug 'hrsh7th/cmp-vsnip'
+" Plug 'hrsh7th/vim-vsnip'
+
+" For luasnip users.
+" Plug 'L3MON4D3/LuaSnip'
+" Plug 'saadparwaiz1/cmp_luasnip'
+
+" For ultisnips users.
+" Plugin 'SirVer/ultisnips'
+Plugin 'quangnguyen30192/cmp-nvim-ultisnips'
+
+" For snippy users.
+" Plug 'dcampos/nvim-snippy'
+" Plug 'dcampos/cmp-snippy'
+
+
+" ========== copilot ==========
+Plugin 'zbirenbaum/copilot.lua', {'do': ':CopilotInstall'}
+Plugin 'zbirenbaum/copilot-cmp', {'branch': 'main'}
 
 " ========== vundle ==========
 call vundle#end()
