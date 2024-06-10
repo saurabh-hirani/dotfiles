@@ -234,8 +234,7 @@ Bundle 'scrooloose/nerdtree'
 map <leader>nt :NERDTreeToggle<CR>
 map <leader>O :NERDTreeFind<CR>
 map <leader>r :NERDTreeFind<cr>
-" when done with vpslit work keep focus in window other than the one you want to quite and do - ctrl + w
-" + o
+" when done with vpslit work keep focus in window other than the one you want to quit and do - ctrl + w + o
 nmap vv :vsplit<CR>
 let NERDTreeShowHidden=1
 " o - open file in current window and shift focus
@@ -288,8 +287,11 @@ Bundle 'benjifisher/matchit.zip'
 " ========== sessionman ==========
 Bundle 'vim-scripts/sessionman.vim'
 map <Leader>so :SessionOpen
+map <Leader>sl :SessionList<CR>
+map <Leader>sol :SessionOpenLast
 map <Leader>ss :SessionSave<CR>
 map <Leader>ssa :SessionSaveAs
+map <Leader>ssh :echo fnamemodify(v:this_session, ':t') <CR>
 " ========== sessionman ==========
 
  
@@ -649,6 +651,7 @@ Plugin 'quangnguyen30192/cmp-nvim-ultisnips'
 " ========== copilot ==========
 Plugin 'zbirenbaum/copilot.lua', {'do': ':CopilotInstall'}
 Plugin 'zbirenbaum/copilot-cmp', {'branch': 'main'}
+" autocmd VimEnter * Copilot disable
 
 " ========== vundle ==========
 call vundle#end()
