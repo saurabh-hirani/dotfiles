@@ -1,15 +1,15 @@
 {
   "coc.preferences.useQuickfixForLocations": true,
   "python.analysis.logLevel": "Information",
-  "python.pythonPath": "/opt/homebrew/opt/python/libexec/bin/python",
+  "python.pythonPath": "/Users/saurabhhirani/.pyenv/shims/python",
   "python.formatting.provider": "black",
-  "python.formatting.blackPath": "/opt/homebrew/bin/black",
+  "python.formatting.blackPath": "/Users/saurabhhirani/.pyenv/shims/black",
   "python.formatting.blackArgs": [
     "--config",
     "/Users/saurabhhirani/.config/black/pyproject.toml"
   ],
   "pyright.enable": true,
-  "pyright.inlayHints.variableTypes": false,
+  "pyright.inlayHints.variableTypes": true,
   "python.linting.enabled": true,
   "python.linting.lintOnSave": true,
   "python.linting.flake8Enabled": true,
@@ -19,24 +19,12 @@
     "--max-line-length",
     "119"
   ],
-  "python.linting.pylintEnabled": true,
+  "python.linting.pylintEnabled": false,
   "python.linting.pylintArgs": [
     "--rcfile",
     "/Users/saurabhhirani/.config/pylint/.pylintrc"
   ],
-  "coc.preferences.formatOnSaveFiletypes": [
-    "python",
-    "css",
-    "markdown",
-    "golang",
-    "javascript",
-    "graphql",
-    "html",
-    "yaml",
-    "json",
-    "shell",
-    "sh"
-  ],
+  "coc.preferences.formatOnSave": true,
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck"
   },

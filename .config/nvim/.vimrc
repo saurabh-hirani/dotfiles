@@ -25,6 +25,8 @@ set autoread | au CursorHold * checktime | call feedkeys("lh")
 
 
 " ========== Global config ==========
+let g:python3_host_prog='/Users/saurabhhirani/.pyenv/shims/python'
+let g:python_host_prog='/Users/saurabhhirani/.pyenv/shims/python'
 filetype on
 filetype indent on
 filetype plugin on
@@ -154,9 +156,8 @@ nnoremap <space>gps :Git push<CR>
 "
 
 " ========== python ==========
-let g:python3_host_prog='/opt/homebrew/opt/python/libexec/bin/python'
 
-python3 << EOF
+python << EOF
 import os.path
 import sys
 import vim
@@ -164,7 +165,8 @@ if 'VIRTUAL_ENV' in os.environ:
     project_base_dir = os.environ['VIRTUAL_ENV']
     sys.path.insert(0, project_base_dir)
     activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-    execfile(activate_this, dict(__file__=activate_this))
+    with open(activate_this, 'r', encoding='utf-8') as f:
+      exec(f.read(), dict(__file__=activate_this))
 EOF
 
 " execute python
@@ -406,6 +408,13 @@ aug python
   au!
   au BufWrite *.py call CocAction('format')
 aug END
+
+"augroup PythonFormatting
+"    autocmd!
+"    "autocmd BufWritePre *.py call CocAction('format')
+"    autocmd BufWritePre *.py echom "Formatting" | call CocAction('format')
+"augroup END
+
 " ========== coc ==========
 
 " ========== coc-pyright ==========
@@ -599,7 +608,8 @@ command! -bang -nargs=? -complete=dir AllFiles call fzf#vim#files('/', fzf#vim#w
 command! -bang -nargs=? -complete=dir HomeFiles call fzf#vim#files('/Users/saurabhhirani/', fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 command! -bang -nargs=? -complete=dir RepoFiles call fzf#vim#files('/Users/saurabhhirani/github/', fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
-source ~/.vimrc.work
+"Fix this later
+" source ~/.vimrc.work
 
 command! -bang -nargs=* Ag call fzf#vim#grep('ag --column --numbers --noheading --color --smart-case '.shellescape(<q-args>), 1,  fzf#vim#with_preview('right:60%'), <bang>0)
 
@@ -651,6 +661,8 @@ Plugin 'quangnguyen30192/cmp-nvim-ultisnips'
 " ========== copilot ==========
 Plugin 'zbirenbaum/copilot.lua', {'do': ':CopilotInstall'}
 Plugin 'zbirenbaum/copilot-cmp', {'branch': 'main'}
+
+" autocmd VimEnter * !source ~/.venv/bin/activate
 " autocmd VimEnter * Copilot disable
 
 " ========== vundle ==========
