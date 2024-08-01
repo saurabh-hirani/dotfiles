@@ -1,0 +1,51 @@
+[flake8]
+# Categories of error codes you wish Flake8 to report.
+# B = bugbear
+# E = pycodestyle errors
+# F = flake8 pyflakes
+# W = pycodestyle warnings
+# B9 = bugbear opinions
+
+# list of codes to ignore.
+ignore =
+        # multiple spaces or tab after ‘,’
+        E24,
+        # continuation line under-indented for hanging indent
+        E121,
+        # closing bracket does not match indentation of opening bracket’s line
+        E123,
+        # continuation line over-indented for hanging indent
+        E126,
+        # missing whitespace around arithmetic operator
+        E226,
+        # "It is fairly common for developers, especially those in closed-source projects, to change the maximum line length to 100 or 120 characters."
+        E501,
+        # multiple statements on one line (def)
+        E704,
+        # line break before binary operator
+        W503,
+        # line break after binary operator
+        W504
+        # line too long
+        C0301
+
+# maximum length of any line (with some exceptions).
+max-line-length = 119
+
+# Show the total number of errors in report.
+count = True
+
+# Show number of occurrences of each error/warning code in report.
+statistics = True
+
+# Comma-separate list of glob patterns to include for checks.
+filename =
+    # include all python files
+    *.py
+
+exclude =
+    # exclude the test folder
+    test/,
+
+# Maximum allowed McCabe complexity value for a block of code.
+max-complexity = 18
