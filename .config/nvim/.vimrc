@@ -409,12 +409,6 @@ aug python
   au BufWrite *.py call CocAction('format')
 aug END
 
-"augroup PythonFormatting
-"    autocmd!
-"    "autocmd BufWritePre *.py call CocAction('format')
-"    autocmd BufWritePre *.py echom "Formatting" | call CocAction('format')
-"augroup END
-
 " ========== coc ==========
 
 " ========== coc-pyright ==========
@@ -662,7 +656,6 @@ Plugin 'quangnguyen30192/cmp-nvim-ultisnips'
 Plugin 'zbirenbaum/copilot.lua', {'do': ':CopilotInstall'}
 Plugin 'zbirenbaum/copilot-cmp', {'branch': 'main'}
 
-" autocmd VimEnter * !source ~/.venv/bin/activate
 " autocmd VimEnter * Copilot disable
 
 " ========== vundle ==========
