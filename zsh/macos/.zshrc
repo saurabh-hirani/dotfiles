@@ -1,4 +1,5 @@
 # If you come from bash you might have to change your $PATH.
+# ca
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
@@ -273,7 +274,7 @@ set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions fd kubectl fzf fzf-zsh-plugin)
+plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions kubectl fzf fzf-zsh-plugin ssh-agent)
 export DISABLE_MAGIC_FUNCTIONS=true
 
 source $ZSH/oh-my-zsh.sh
@@ -340,7 +341,8 @@ source ~/.aliasrc
 [[ -f ~/.aliasrc.work ]] && source ~/.aliasrc.work
 
 #complete -C '/usr/local/bin/aws_completer' aws
-source /usr/local/bin/aws_zsh_completer.sh
+# source /usr/local/bin/aws_zsh_completer.sh
+complete -C aws_completer aws
 
 [[ -s "$HOME/.gvm/scripts/gvm" ]] && source "$HOME/.gvm/scripts/gvm"
 
@@ -358,8 +360,14 @@ fi
 
 
 # powerline
-export POWERLINE_CONFIG_COMMAND="/opt/homebrew/bin/powerline-config"
-source /opt/homebrew/lib/python3.10/site-packages/powerline/bindings/zsh/powerline.zsh
+# export POWERLINE_CONFIG_COMMAND="/opt/homebrew/bin/powerline-config"
+# export POWERLINE_CONFIG_COMMAND="$HOME/.venv/bin/powerline-config"
+# source /opt/homebrew/lib/python3.10/site-packages/powerline/bindings/zsh/powerline.zsh
+# when python doesn't allow global installs
+# source $HOME/.venv/lib/python3.12/site-packages/powerline/bindings/zsh/powerline.zsh
+
+export POWERLINE_CONFIG_COMMAND="$HOME/.pyenv/shims/powerline-config"
+source $HOME/.pyenv/versions/3.12.4/lib/python3.12/site-packages/powerline/bindings/zsh/powerline.zsh
 
 tmux-send-keys-to-all-windows() {
   local keys=$1
@@ -536,7 +544,7 @@ export TRACKME_DISPLAY=true
 
 export PATH=$(printf "%s" "$PATH" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')
 
-eval "$(hub alias -s)"
+# eval "$(hub alias -s)"
 
 # Do not export it so that bash or other shells don't mess it up
 HISTFILE=~/.zsh_history
@@ -616,3 +624,11 @@ if [ -f '/Users/saurabhhirani/Downloads/google-cloud-sdk/completion.zsh.inc' ]; 
 
 export PYTHONSTARTUP=$HOME/.pythonstartup
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit && compinit
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)" 
