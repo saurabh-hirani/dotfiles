@@ -9,7 +9,9 @@
     "/Users/saurabhhirani/.config/black/pyproject.toml"
   ],
   "pyright.enable": true,
-  "pyright.inlayHints.variableTypes": true,
+  "pyright.inlayHints.functionReturnTypes": true,
+  "pyright.inlayHints.variableTypes": false,
+  "pyright.inlayHints.parameterTypes": false,
   "python.linting.enabled": true,
   "python.linting.lintOnSave": true,
   "python.linting.flake8Enabled": true,
