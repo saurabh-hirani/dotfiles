@@ -1,0 +1,30 @@
+[url "ssh://git@github.com/"]
+  insteadOf = https://github.com/
+
+[includeIf "gitdir:~/github/"]
+  path = .gitconfig.github
+
+[alias]
+  c = commit
+  ci = commit --edit
+  ca = commit --amend
+  co = checkout
+  cob = checkout -b
+  s = status
+  suno = status -uno
+  a = add
+  au = add -u
+  pso = git push origin
+  pom = git push origin master
+  pomn = git push origin main
+  puo = git pull origin
+  lo = log
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  d = diff
+  f = fetch --all
+
+[core]
+	editor = vim
+
+[color]
+	ui = true
