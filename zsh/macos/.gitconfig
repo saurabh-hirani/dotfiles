@@ -16,8 +16,8 @@
   a = add
   au = add -u
   pso = push origin
-  pom = push origin master
-  pomn = push origin main
+  psom = push origin master
+  psomn = push origin main
   puo = pull origin
   lo = log
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
