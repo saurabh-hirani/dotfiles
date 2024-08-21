@@ -6,6 +6,7 @@
 
 [alias]
   c = commit
+  cm = commit -m
   ci = commit --edit
   ca = commit --amend
   co = checkout
@@ -14,10 +15,10 @@
   suno = status -uno
   a = add
   au = add -u
-  pso = git push origin
-  pom = git push origin master
-  pomn = git push origin main
-  puo = git pull origin
+  pso = push origin
+  pom = push origin master
+  pomn = push origin main
+  puo = pull origin
   lo = log
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   d = diff
