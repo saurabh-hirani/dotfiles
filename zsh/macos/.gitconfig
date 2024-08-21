@@ -12,6 +12,7 @@
   co = checkout
   cob = checkout -b
   s = status
+  sh = show
   suno = status -uno
   a = add
   au = add -u
