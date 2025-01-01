@@ -1,235 +1,45 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time Oh My Zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
-ZSH_THEME="powerlevel9k/powerlevel9k"
-
-darken() {
-  export THEME=dark
-  # export BAT_THEME=default
-  it2prof dark
-  reload_profile
-}
-
-lighten() {
-  unset THEME
-  export BAT_THEME=ansi-light
-  it2prof light
-  reload_profile
-}
-
-whiten() {
-  unset THEME
-  it2prof white
-  reload_profile
-  export BAT_THEME=ansi-light
-}
-
-it2prof() {
-  if [[ "$TERM" =~ "screen" ]]; then
-    scrn_prof "$1"
-  else
-    # send escape sequence to change iTerm2 profile
-    echo -e "\033]50;SetProfile=$1\007"
-  fi
-}
-
-scrn_prof() {
-  if [ -n "$TMUX" ]; then
-    # tell tmux to send escape sequence to underlying terminal
-    echo -e "\033Ptmux;\033\033]50;SetProfile=$1\007\033\\"
-  else
-    # tell gnu screen to send escape sequence to underlying terminal
-    echo -e "\033P\033]50;SetProfile=$1\007\033\\"
-  fi
-}
-
-function reload_profile() {
-  . $HOME/.zshrc
-}
-
-
-function set-powerlevel9k-color-scheme() {
-  curr_session=$(tmux display-message -p '#S')
-  mkdir -p "$HOME/tmux-sessions/$curr_session"
-
-  echo $1 > $HOME/tmux-sessions/$curr_session/powerlevel9k-color-scheme
-}
-
-function get-powerlevel9k-color-scheme() {
-  curr_session=$(tmux display-message -p '#S')
-  mkdir -p "$HOME/tmux-sessions/$curr_session"
-  file="$HOME/tmux-sessions/$curr_session/powerlevel9k-color-scheme"
-  if [[ -f $file ]]; then
-    cat $file
-    return 0
-  else
-    set-powerlevel9k-color-scheme 'dark'
-  fi
-  echo 'dark'
-}
-
-func set-powerlevel9k-color-scheme-env() {
-  color_scheme=$1
-  if [[ $POWERLEVEL9K_COLOR_SCHEME == 'light' ]]; then
-    POWERLEVEL9K_DIR_HOME_BACKGROUND='white'
-    POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='white'
-    POWERLEVEL9K_DIR_ETC_BACKGROUND='white'
-    POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='white'
-
-    POWERLEVEL9K_DIR_HOME_FOREGROUND='010'
-    POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='010'
-    POWERLEVEL9K_DIR_ETC_FOREGROUND='010'
-    POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='010'
-
-    POWERLEVEL9K_VCS_CLEAN_BACKGROUND='white'
-    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='010'
-
-    POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='white'
-    # POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='019'
-    POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='016'
-
-    POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='white'
-    POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='016'
-  else
-    POWERLEVEL9K_DIR_HOME_BACKGROUND='004'
-    POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='004'
-    POWERLEVEL9K_DIR_ETC_BACKGROUND='004'
-    POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='004'
-
-    POWERLEVEL9K_DIR_HOME_FOREGROUND='black'
-    POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='black'
-    POWERLEVEL9K_DIR_ETC_FOREGROUND='black'
-    POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='black'
-
-    POWERLEVEL9K_VCS_CLEAN_BACKGROUND='002'
-    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-
-    POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='002'
-    POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
-
-    POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='003'
-    POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
-  fi
-}
-
-function toggle-powerlevel9k-color-scheme() {
-  curr_color_scheme=''
-  curr_color_scheme=$(get-powerlevel9k-color-scheme)
-  if [[ $curr_color_scheme == 'light' ]]; then
-    new_color_scheme='dark'
-  else
-    new_color_scheme='light'
-  fi
-  set-powerlevel9k-color-scheme $new_color_scheme
-  set-powerlevel9k-color-scheme-env $new_color_scheme
-  echo $new_color_scheme
-}
-
-POWERLEVEL9K_COLOR_SCHEME=$(get-powerlevel9k-color-scheme)
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=5
-# POWERLEVEL9K_SHORTEN_STRATEGY=truncate_from_right
-POWERLEVEL9K_SHORTEN_STRATEGY=None
-POWERLEVEL9K_SHORTEN_DELIMITER=""
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-
-# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_task_tracking_status_left dir rbenv vcs)	
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir rbenv vcs)	
-
-# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs custom_task_tracking_status_right)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs)
-
-POWERLEVEL9K_MODE=”nerdfont-complete”
-POWERLEVEL9K_VCS_GIT_ALWAYS_SHOW_REMOTE_BRANCH='1' 
-#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="↱"
-#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="↳ "
-
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT="custom_task_tracking_status_left"
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT_BACKGROUND="blue"
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_LEFT_FOREGROUND="black"
-
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT="custom_task_tracking_status_right"
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT_BACKGROUND="blue"
-POWERLEVEL9K_CUSTOM_TASK_TRACKING_STATUS_RIGHT_FOREGROUND="black"
-
-SEGMENT_SEPARATOR=$'\ue0b0'
-LEFT_SEGMENT_SEPARATOR=$'\ue0b2'
-
-prompt_segment() {
-  local bg fg
-  [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
-  [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
-  if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
-  else
-    echo -n "%{$bg%}%{$fg%} "
-  fi
-  CURRENT_BG=$1
-  [[ -n $3 ]] && echo -n $3
-}
-
-prompt_end() {
-  if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
-  else
-    echo -n "%{%k%}"
-  fi
-  echo -n "%{%f%}"
-  CURRENT_BG=''
-}
-
-custom_task_tracking_status_left() {
-  [[ -f /tmp/track.stop ]] || echo -n "$(cat /tmp/task_tracking_status_left.txt)"
-  # echo -n "%{%K{red}%}%{%F{black}%} 5050 %{%K{yellow}%}%{%F{black}%} 5050 %{%K{green}%}%{%F{black}%} 5050 %{%K{blue}%}%{%F{black}%} 50%% %{%K{red}%}%{%F{black}%} 60%%"
-
-  # bg="%K{red}"
-  # fg="%F{black}"
-  # echo -n "%{$bg%}%{$fg%} 5050 "
-   
-  prompt_segment blue black "5050"
-  prompt_end
-}
-
-custom_task_tracking_status_right() {
-  [[ -f /tmp/track.stop ]] || echo -n "$(cat /tmp/task_tracking_status_right.txt)"
-  #echo -n "%{%K{red}%}%{%F{black}%} 5050 %{%K{yellow}%}%{%F{black}%} 5050 %{%K{green}%}%{%F{black}%} 5050 %{%K{blue}%}%{%F{black}%} 50%% %{%K{red}%}%{%F{black}%} 60%%"
-
-  # bg="%K{red}"
-  # fg="%F{black}"
-  # echo -n "%{$bg%}%{$fg%} 5050 "
-   
-  # prompt_segment blue black "5050"
-  # prompt_end
-}
-
-function toggle-task-tracker() {
-  if [[ -f /tmp/track.stop ]]; then
-    rm /tmp/track.stop
-  else
-    touch /tmp/track.stop
-  fi
-}
-
-set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in $ZSH/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -241,6 +51,9 @@ set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -250,23 +63,23 @@ set-powerlevel9k-color-scheme-env $POWERLEVEL9K_COLOR_SCHEME
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git gitfast tmux autojump knife docker zsh-autosuggestions fd kubectl fzf)
-export DISABLE_MAGIC_FUNCTIONS=true
+plugins=(git fzf fzf-zsh-plugin zsh-autosuggestions tmux autojump docker)
 
 source $ZSH/oh-my-zsh.sh
-
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=6'
-setopt NO_BEEP
 
 # User configuration
 
@@ -279,75 +92,79 @@ setopt NO_BEEP
 # if [[ -n $SSH_CONNECTION ]]; then
 #   export EDITOR='vim'
 # else
-#   export EDITOR='mvim'
+#   export EDITOR='nvim'
 # fi
 
 # Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# export ARCHFLAGS="-arch $(uname -m)"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# Set personal aliases, overriding those provided by Oh My Zsh libs,
+# plugins, and themes. Aliases can be placed here, though Oh My Zsh
+# users are encouraged to define aliases within a top-level file in
+# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
+# - $ZSH_CUSTOM/aliases.zsh
+# - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-# path
-export PATH="/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/python:$HOME/Library/Python/3.7/bin/:/usr/local/opt/mysql-client/bin:$PATH"
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ -s /home/vboxuser/.autojump/etc/profile.d/autojump.sh ]] && source /home/vboxuser/.autojump/etc/profile.d/autojump.sh
+autoload -U compinit && compinit -u
 
-export EDITOR='nvim'
+test -r ~/.dir_colors && eval $(dircolors ~/.dir_colors)
 
-# vi mode
-set -o vi
+## path changes start
+export PATH="$PATH:/home/vboxuser/.local/bin/"
+## path changes end
 
-# reverse search
-bindkey -v
+export EDITOR='vim'
+
 bindkey '^R' history-incremental-search-backward
+bindkey -v 
+# typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+# bindkey '^I'   complete-word       # tab          | complete
+# bindkey '^[[Z' autosuggest-accept  # shift + tab  | autosuggest
 
-# required by chefdk
-if [[ -x "$(command -v chef >/dev/null 2>&1)" ]]; then
-  eval "$(chef shell-init zsh)"
-fi
+## fzf changes start
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# required by some term apps
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
+# fzf ctrl-r and alt-c behavior
+# to overcome vscode existng ctrl+k, ctrl+j bindings
+#
+export FZF_DEFAULT_OPTS="-m --bind=ctrl-w:up,ctrl-o:down --history=$HOME/.fzf_history"
 
-# aliases
-alias toggle-prompt-color='toggle-powerlevel9k-color-scheme && reload_profile'
-alias toggle-prompt-color-all="toggle-powerlevel9k-color-scheme && tmux-send-cmd-to-all-windows 'reload_profile'"
-alias aws-clear-env='env | \grep AWS | while read line; do var=$(echo $line|cut -f1 -d'='); echo $var; unset $var; done'
-alias aws-show-env='env | \grep AWS'
+bindkey "¸" fzf-cd-widget
+export FZF_ALT_C_COMMAND="fd -t d --hidden --follow --exclude \".git\" ."
 
-source ~/.aliasrc
+bindkey "þ" fzf-file-widget
+export FZF_CTRL_T_COMMAND="fd -t f --hidden --follow --exclude \".git\" ."
 
-[[ -f ~/.aliasrc.work ]] && source ~/.aliasrc.work
+# fzf single quote tab completion behavior
+export FZF_COMPLETION_TRIGGER="'"
 
-#complete -C '/usr/local/bin/aws_completer' aws
-source /usr/local/bin/aws_zsh_completer.sh
+export FZF_PREVIEW_COMMAND="COLORTERM=truecolor bat --style=numbers --color=always {}"
 
-export GOROOT='/usr/local/go'
-export GOPATH=$HOME/go/
-export PATH="$PATH:$GOPATH/bin:$GOROOT/bin"
+function vif() {
+    local fname
+    fname=$(fzf) || return
+    vim "$fname"
+}
 
-export LESSOPEN="|tar --to-stdout -zxf %s"
+_fzf_compgen_path() {
+  fd --type f --hidden --follow --exclude .git . "$1"
+}
 
-export MY_ENV_VARS_FILE="$HOME/.envvars"
+_fzf_compgen_dir() {
+  fd --type d . "$1"
+}
+source <(fzf --zsh)
+## fzf changes end
 
-if [[ -f $MY_ENV_VARS_FILE ]]; then
-  source $MY_ENV_VARS_FILE
-fi
-
-
-# powerline
-export POWERLINE_CONFIG_COMMAND="$HOME/.pyenv/shims/powerline-config"
-source $HOME/.pyenv/versions/3.7.9/lib/python3.7/site-packages/powerline/bindings/zsh/powerline.zsh
-
+## tmux changes start
 tmux-send-keys-to-all-windows() {
   local keys=$1
   curr_tmux_session=$(tmux display-message -p '#S')
@@ -364,13 +181,15 @@ tmux-send-keys-to-all-panes() {
 }
 
 tmux-send-cmd-to-all-windows() {
-  local cmd=$1 
-  tmux-send-keys-to-all-windows "$cmd "
+  local cmd=$1
+  tmux-send-keys-to-all-windows "$cmd
+"
 }
 
 tmux-send-cmd-to-all-panes() {
-  local cmd=$1 
-  tmux-send-keys-to-all-panes "$cmd "
+  local cmd=$1
+  tmux-send-keys-to-all-panes "$cmd
+"
 }
 
 tmux-env-set() {
@@ -384,7 +203,7 @@ tmux-env-set() {
   local set_env_var_cmd="export $var_name=$var_value"
   local set_env_var_regex="^${set_env_var_cmd}$"
 
-  local curr_value=$(egrep "$set_env_var_regex" $MY_ENV_VARS_FILE)
+  local curr_value=$(\grep -E "$set_env_var_regex" $MY_ENV_VARS_FILE)
   if ! [[ $? -eq 0 ]]; then
     #egrep -v "$set_env_var_regex" $MY_ENV_VARS_FILE > $MY_ENV_VARS_FILE.tmp ; mv $MY_ENV_VARS_FILE.tmp  $MY_ENV_VARS_FILE
     echo "unset $var_name"  | tee -a  $MY_ENV_VARS_FILE
@@ -399,27 +218,19 @@ tmux-env-reload() {
 }
 
 tmux-env-flush() {
-  egrep '^export' $MY_ENV_VARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
-    echo "unset $var_name" 
+  \grep -E '^export' $MY_ENV_VARS_FILE | cut -f2 -d' ' | cut -f1 -d'=' | while read var_name; do
+    echo "unset $var_name"
   done | tee $MY_ENV_VARS_FILE.flushing
   tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE.flushing"
   echo > $MY_ENV_VARS_FILE
 }
 
-knife-profiles() {
-  ls -1A ~/.chef | \grep -vi knife
-}
+## tmux changes end
 
-show-knife-profile() {
-  local knife_profile=$1
-  echo CHEF_ENV=$knife_profile
-}
+## aws changes start
 
-set-knife-profile() {
-  local chef_env=$1
-  tmux-env-set CHEF_ENV ${chef_env}
-  tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
-}
+alias aws-clear-env='env | \grep AWS | while read line; do var=$(echo $line|cut -f1 -d'='); echo $var; unset $var; done'
+alias aws-show-env='env | \grep AWS'
 
 aws-profiles() {
   cat ~/.aws/credentials | \grep '\[' | \grep -v '#' | tr -d '[' | tr -d ']'
@@ -439,28 +250,28 @@ show-aws-account() {
 
 show-aws-profile() {
   local aws_profile=$1
-  profile_data=$(cat ~/.aws/credentials | \grep "\[$aws_profile\]" -A5)  
-  echo $profile_data | \grep '#' | tr ' ' '\n' | while read token; do 
+  profile_data=$(cat ~/.aws/credentials | \grep "\[$aws_profile\]" -A5)
+  echo $profile_data | \grep '#' | tr ' ' '\n' | while read token; do
     if echo $token | \grep -q '#'; then continue; fi
     key=$(echo $token | cut -f1 -d ':' | tr '[a-z]' '[A-Z]')
     value=$(echo $token | cut -f2 -d ':')
     echo "$key: $value"
   done
   echo
-  echo AWS_PROFILE=${aws_profile} 
-  echo AWS_ACCESS_KEY_ID="$(echo $profile_data | \grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')" 
+  echo AWS_PROFILE=${aws_profile}
+  echo AWS_ACCESS_KEY_ID="$(echo $profile_data | \grep aws_access_key_id | cut -f2 -d'=' | tr -d ' ')"
   echo AWS_SECRET_ACCESS_KEY="$(echo $profile_data | \grep aws_secret_access_key | cut -f2 -d'=' | tr -d ' ')"
   echo AWS_DEFAULT_REGION="$(echo $profile_data | \grep region| cut -f2 -d'=' | tr -d ' ')"
 }
 
 set-aws-profile-local() {
   local aws_profile=$1
-  profile_data=$(cat ~/.aws/credentials | \grep "\[$aws_profile\]" -A5)  
-  export AWS_PROFILE=${aws_profile} 
+  profile_data=$(cat ~/.aws/credentials | \grep "\[$aws_profile\]" -A5)
+  export AWS_PROFILE=${aws_profile}
   export AWS_ACCESS_KEY_ID="$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   export AWS_SECRET_ACCESS_KEY="$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   export AWS_DEFAULT_REGION="$(echo $profile_data | tail -n +5 | head -1 | cut -f2 -d'=' | tr -d ' ')"
-  tmux-env-set AWS_PROFILE ${aws_profile} 
+  tmux-env-set AWS_PROFILE ${aws_profile}
   tmux-env-set AWS_ACCESS_KEY_ID "$(echo $profile_data | tail -n +3 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   tmux-env-set AWS_SECRET_ACCESS_KEY "$(echo $profile_data | tail -n +4 | head -1 | cut -f2 -d'=' | tr -d ' ')"
   tmux-env-set AWS_DEFAULT_REGION "$(echo $profile_data | tail -n +5 | head -1 | cut -f2 -d'=' | tr -d ' ')"
@@ -471,77 +282,10 @@ set-aws-profile() {
   # tmux-send-cmd-to-all-windows "source $MY_ENV_VARS_FILE"
 }
 
-# COMPLETION SETTINGS
-# source $MY_ENV_VARS_FILE.flushing 
-# dd custom completion scripts
-fpath=(~/.oh-my-zsh/completions $fpath)
- 
-# compsys initialization
-autoload -U compinit
-compinit
- 
-# show completion menu when number of options is at least 2
-zstyle ':completion:*' menu select=2
+## aws changes end
 
-if ! [[ -f $MY_ENV_VARS_FILE ]]; then
-  touch $MY_ENV_VARS_FILE
-fi
+## history settings changes start
 
-source $MY_ENV_VARS_FILE
-
-if [[ -f ~/.trello ]]; then
-  source ~/.trello
-fi
-
-source /usr/local/share/zsh/site-functions/_tmuxinator
-
-disable r
-
-export DISABLE_AUTO_TITLE=true
-export TRACKME_DISPLAY=true
-
-# tabtab source for serverless package
-# uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/serverless.zsh
-
-# tabtab source for sls package
-# uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/sls.zsh
-
-[[ -f '/tmp/task_tracking_status_left.txt' ]] || touch /tmp/task_tracking_status_left.txt
-[[ -f '/tmp/task_tracking_status_right.txt' ]] || touch /tmp/task_tracking_status_right.txt
-
-[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
-
-[[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
-
-[[ -f ~/.zshrc.work ]] && source ~/.zshrc.work
-
-[[ -f ~/.zprofile ]] && source ~/.zprofile
-
-export PATH=$(printf "%s" "$PATH" | awk -v RS=':' '!a[$1]++ { if (NR > 1) printf RS; printf $1 }')
-
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-eval "$(hub alias -s)"
-
-export RBENV_ROOT="/usr/local/rbenv"
-if [ -d "${RBENV_ROOT}" ]; then
-  export PATH="${RBENV_ROOT}/bin:${PATH}"
-fi
-
-export PATH="${RBENV_ROOT}/bin:$HOME/.local/bin:${PATH}"
-export PATH="${RBENV_ROOT}/bin:$HOME/.local/bin:${PATH}:/home/saurabh/github/saurabh-hirani/bin"
-export PATH="$HOME/.tfenv/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-# Do not export it so that bash or other shells don't mess it up
 HISTFILE=~/.zsh_history
 HISTFILESIZE=999999999
 HISTSIZE=$HISTFILESIZE
@@ -561,20 +305,8 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
-# to overcome vscode existng ctrl+k, ctrl+j bindings
-export FZF_DEFAULT_OPTS='-m --bind=ctrl-w:up,ctrl-o:down'
-export FZF_CTRL_T_COMMAND="fd --exclude '.git' --exclude 'node_modules'"
-export FZF_ALT_C_COMMAND="fd --exclude '.git' --exclude 'node_modules' --type d"
+## history settings changes end
 
-# TODO
-export TODO_DIR="$HOME/work"
-export TODO_FILE="$TODO_DIR/todo.txt"
-export DONE_FILE="$TODO_DIR/done.txt"
-export REPORT_FILE="$TODO_DIR/report.txt"
-export TMP_FILE="/tmp/todo.tmp"
-export TODOTXT_DEFAULT_ACTION=ls
+source ~/.aliasrc
 
-# Thoughts
-echo "Few things, right things, brilliantly executed."
-
-
+set -o vi
