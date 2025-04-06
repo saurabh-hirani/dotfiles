@@ -18,5 +18,32 @@
   "terminal": {
     "dock": "bottom",
     "font_family": "Meslo LG L for Powerline"
+  },
+  "languages": {
+    "Python": {
+      "format_on_save": {
+        "external": {
+          "command": "/Users/saurabhhirani/.pyenv/shims/black",
+          "arguments": [
+            "-",
+            "--config",
+            "/Users/saurabhhirani/.config/black/pyproject.toml"
+          ]
+        }
+      }
+    }
+  },
+  "lsp": {
+    "pyright": {
+      "settings": {
+        "python.analysis": {
+          "diagnosticMode": "workspace",
+          "typeCheckingMode": "off"
+        },
+        "python": {
+          "pythonPath": ".venv/bin/python"
+        }
+      }
+    }
   }
 }

@@ -10,6 +10,9 @@
     "context": "Workspace",
     "bindings": {
       "ctrl-s": "workspace::Save",
+      "ctrl-k": "pane::ActivateNextItem",
+      "ctrl-j": "pane::ActivatePreviousItem",
+      "ctrl-o": "pane::RevealInProjectPanel",
       "cmd-s": null
       // "shift shift": "file_finder::Toggle"
     }
@@ -35,7 +38,8 @@
       "ctrl-k": "pane::ActivateNextItem",
       "ctrl-j": "pane::ActivatePreviousItem",
       "ctrl-,": ["workspace::SendKeystrokes", "ctrl-tab enter"],
-      "ctrl-w w": "project_panel::ToggleFocus"
+      "ctrl-w w": "project_panel::ToggleFocus",
+      "ctrl-o": "pane::RevealInProjectPanel"
     }
   },
   {
