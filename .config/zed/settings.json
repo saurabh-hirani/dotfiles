@@ -6,6 +6,7 @@
 // To see all of Zed's default settings without changing your
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
+//
 {
   "vim_mode": true,
   "ui_font_size": 16,
@@ -19,72 +20,42 @@
     "dock": "bottom",
     "font_family": "Meslo LG L for Powerline"
   },
-  "languages": {
-    "Python": {
-      "language_servers": [
-        "pyright",
-        "ruff"
-      ],
-      "format_on_save": "on",
-      "formatter": [
-        {
-          "code_actions": {
-            "source.organizeImports.ruff": true,
-            "source.fixAll.ruff": true
-          }
-        },
-        {
-          "language_server": {
-            "name": "ruff"
-          }
-        }
-      ]
-      // "format_on_save": {
-      //   "external": {
-      //     "command": "/Users/saurabhhirani/.pyenv/shims/black",
-      //     "arguments": [
-      //       "-",
-      //       "--config",
-      //       "/Users/saurabhhirani/.config/black/pyproject.toml"
-      //     ]
-      //   }
-      // }
-    }
-  },
   "git": {
     "inline_blame": {
       "enabled": false
     }
   },
-  "lsp": {
-    "ruff": {
-      "settings": {
-        "python": {
-          "pythonPath": ".venv/bin/python"
-        }
-      },
-      "initialization_options": {
-        "settings": {
-          "organizeImports": true,
-          "lineLength": 119,
-          // "fixAll": true,
-          "lint": {
-            "extendSelect": [
-              "I"
+  "languages": {
+    "Python": {
+      "format_on_save": [
+        {
+          "external": {
+            "command": "/Users/saurabhhirani/.pyenv/shims/isort",
+            "arguments": ["-"]
+          }
+        },
+        {
+          "external": {
+            "command": "/Users/saurabhhirani/.pyenv/shims/black",
+            "arguments": [
+              "-",
+              "--config",
+              "/Users/saurabhhirani/.config/black/pyproject.toml"
             ]
           }
         }
-      }
-    },
+      ]
+    }
+  },
+  "lsp": {
     "pyright": {
       "settings": {
+        "python.analysis": {
+          "diagnosticMode": "workspace",
+          "typeCheckingMode": "off"
+        },
         "python": {
           "pythonPath": ".venv/bin/python"
-        },
-        "python.analysis": {
-          "ignore": [
-            "*"
-          ]
         }
       }
     }

@@ -1,6 +1,6 @@
 [tool.black]
 # How many characters per line to allow.
-skip-string-normalization = true
+skip-string-normalization = false
 line-length = 119
 target_version = ['py38']
 
