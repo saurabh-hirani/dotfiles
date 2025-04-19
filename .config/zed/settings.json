@@ -25,7 +25,7 @@
   },
   "terminal": {
     "dock": "bottom",
-    "font_family": "Meslo LG L for Powerline"
+    "font_family": "MesloLGS NF"
   },
   "git": {
     "inline_blame": {
@@ -84,7 +84,7 @@
           "typeCheckingMode": "off"
         },
         "python": {
-          "pythonPath": ".venv/bin/python"
+          "pythonPath": "/Users/Saurabh.Hirani/.pyenv/shims/python"
         }
       }
     }
