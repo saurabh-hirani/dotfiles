@@ -36,7 +36,7 @@
     "Python": {
       // "formatter": {
       //   "external": {
-      //     "command": "/Users/Saurabh.Hirani/.pyenv/shims/ruff",
+      //     "command": "~/pyenv/shims/ruff",
       //     "arguments": ["format", "-"]
       //   }
       // },
@@ -44,7 +44,8 @@
       "format_on_save": [
         // {
         //   "external": {
-        //     "command": "/Users/Saurabh.Hirani/.pyenv/shims/ruff",
+        //     "command": "~/pyenv/shims/ruff",
+
         //     "arguments": [
         //       "check",
         //       // "--config",
@@ -59,18 +60,16 @@
         // }
         {
           "external": {
-            "command": "/Users/Saurabh.Hirani/.pyenv/shims/isort",
+            "command": "~/pyenv/shims/isort",
+
             "arguments": ["-"]
           }
         },
         {
           "external": {
-            "command": "/Users/Saurabh.Hirani/.pyenv/shims/black",
-            "arguments": [
-              "-",
-              "--config",
-              "/Users/Saurabh.Hirani/.config/black/pyproject.toml"
-            ]
+            "command": "~/pyenv/shims/black",
+
+            "arguments": ["-", "--config", "~/.config/black/pyproject.toml"]
           }
         }
       ]
@@ -84,7 +83,7 @@
           "typeCheckingMode": "off"
         },
         "python": {
-          "pythonPath": "/Users/Saurabh.Hirani/.pyenv/shims/python"
+          "pythonPath": "~/pyenv/shims/python"
         }
       }
     }
