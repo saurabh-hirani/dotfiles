@@ -8,7 +8,7 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 //
 {
-  "assistant": {
+  "agent": {
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-4o"
@@ -34,9 +34,10 @@
   },
   "languages": {
     "Python": {
+      "language_servers": ["!pylsp", "pyright"],
       // "formatter": {
       //   "external": {
-      //     "command": "~/pyenv/shims/ruff",
+      //     "command": "~/.pyenv/shims/ruff",
       //     "arguments": ["format", "-"]
       //   }
       // },
@@ -44,7 +45,7 @@
       "format_on_save": [
         // {
         //   "external": {
-        //     "command": "~/pyenv/shims/ruff",
+        //     "command": "~/.pyenv/shims/ruff",
 
         //     "arguments": [
         //       "check",
@@ -60,16 +61,18 @@
         // }
         {
           "external": {
-            "command": "~/pyenv/shims/isort",
-
+            "command": "isort",
             "arguments": ["-"]
           }
         },
         {
           "external": {
-            "command": "~/pyenv/shims/black",
-
-            "arguments": ["-", "--config", "~/.config/black/pyproject.toml"]
+            "command": "black",
+            "arguments": [
+              "-",
+              "--config",
+              "/Users/Saurabh.Hirani/.config/black/pyproject.toml"
+            ]
           }
         }
       ]
@@ -83,7 +86,7 @@
           "typeCheckingMode": "off"
         },
         "python": {
-          "pythonPath": "~/pyenv/shims/python"
+          "pythonPath": "/Users/Saurabh.Hirani/.pyenv/shims/python"
         }
       }
     }
