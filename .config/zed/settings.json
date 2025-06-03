@@ -32,52 +32,6 @@
       "enabled": false
     }
   },
-  "languages": {
-    "Python": {
-      "language_servers": ["!pylsp", "pyright"],
-      // "formatter": {
-      //   "external": {
-      //     "command": "~/.pyenv/shims/ruff",
-      //     "arguments": ["format", "-"]
-      //   }
-      // },
-      // "format_on_save": "on"
-      "format_on_save": [
-        // {
-        //   "external": {
-        //     "command": "~/.pyenv/shims/ruff",
-
-        //     "arguments": [
-        //       "check",
-        //       // "--config",
-        //       // "~/.config/black/pyproject.toml",
-        //       "--exit-zero",
-        //       "--fix",
-        //       "--stdin-filename",
-        //       "{buffer_path}",
-        //       "-"
-        //     ]
-        //   }
-        // }
-        {
-          "external": {
-            "command": "isort",
-            "arguments": ["-"]
-          }
-        },
-        {
-          "external": {
-            "command": "black",
-            "arguments": [
-              "-",
-              "--config",
-              "/Users/Saurabh.Hirani/.config/black/pyproject.toml"
-            ]
-          }
-        }
-      ]
-    }
-  },
   "lsp": {
     "pyright": {
       "settings": {
@@ -89,6 +43,74 @@
           "pythonPath": "/Users/Saurabh.Hirani/.pyenv/shims/python"
         }
       }
+    },
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "configurationPreference": "filesystemFirst",
+          "configuration": {
+            "format": {
+              "quote-style": "double",
+              "skip-magic-trailing-comma": false
+            }
+          },
+          "codeAction": {
+            "disableRuleComment": { "enable": false },
+            "fixViolation": { "enable": true }
+          },
+          "lint": {
+            "select": ["ALL"],
+            "ignore": [
+              "D",
+              "S101", // Checks for uses of the assert keyword.
+              "EXE001", // Checks for a shebang directive in a file that is not executable.
+              "PTH120", // Checks for uses of os.path.dirname.
+              "PTH100", // Checks for uses of os.path.abspath.
+              "E402", // Checks for imports that are not at the top of the file.
+              "ANN201", // Consider for later - Checks that public functions and methods have return type annotations.
+              "ANN001", // Checks that function arguments have type annotations.
+              "PLR2004", // Checks for the use of unnamed numerical constants ("magic") values in comparisons.
+              "LOG015", // Checks for usages of the following logging top-level functions: debug, info, warn, warning, error, critical, log, exception.
+              "G004", // Checks for uses of f-strings to format logging messages.
+              "ERA001", // Checks for commented-out Python code.
+              "PTH110", // Checks for uses of os.path.exists.
+              "PTH123", // Checks for uses of the open() builtin.
+              "COM812", // Checks for the absence of trailing commas.
+              "PLR0913", // Consider for later - Checks for function definitions that include too many arguments.
+              "FBT002", // Checks for the use of boolean positional arguments in function definitions
+              "PERF401" // Checks for for loops that can be replaced by a list comprehension.
+            ],
+            "extendSelect": ["I"],
+            "enable": true
+          },
+          "format": {
+            "preview": true
+          },
+          "fixAll": true,
+          "organizeImports": true,
+          "showSyntaxErrors": true,
+          "lineLength": 119
+        }
+      }
+    }
+  },
+  "languages": {
+    "Python": {
+      "language_servers": ["!pylsp", "pyright", "ruff"],
+      "format_on_save": "on",
+      "formatter": [
+        {
+          "code_actions": {
+            "source.organizeImports.ruff": true
+            // "source.fixAll.ruff": true
+          }
+        },
+        {
+          "language_server": {
+            "name": "ruff"
+          }
+        }
+      ]
     }
   }
 }
