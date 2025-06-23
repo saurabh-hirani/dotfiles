@@ -8,7 +8,10 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 //
 {
+  "icon_theme": "Zed (Default)",
   "agent": {
+    "enabled": true,
+    "default_profile": "ask",
     "default_model": {
       "provider": "copilot_chat",
       "model": "gpt-4o"
@@ -37,7 +40,7 @@
       "settings": {
         "python.analysis": {
           "diagnosticMode": "workspace",
-          "typeCheckingMode": "off"
+          "typeCheckingMode": "basic"
         },
         "python": {
           "pythonPath": "/Users/Saurabh.Hirani/.pyenv/shims/python"
@@ -62,23 +65,27 @@
             "select": ["ALL"],
             "ignore": [
               "D",
+              "PTH", // Path vs os.path errors
               "S101", // Checks for uses of the assert keyword.
               "EXE001", // Checks for a shebang directive in a file that is not executable.
               "PTH120", // Checks for uses of os.path.dirname.
               "PTH100", // Checks for uses of os.path.abspath.
               "E402", // Checks for imports that are not at the top of the file.
-              "ANN201", // Consider for later - Checks that public functions and methods have return type annotations.
-              "ANN001", // Checks that function arguments have type annotations.
+              // "ANN201", // Consider for later - Checks that public functions and methods have return type annotations.
+              // "ANN001", // Checks that function arguments have type annotations.
               "PLR2004", // Checks for the use of unnamed numerical constants ("magic") values in comparisons.
               "LOG015", // Checks for usages of the following logging top-level functions: debug, info, warn, warning, error, critical, log, exception.
               "G004", // Checks for uses of f-strings to format logging messages.
               "ERA001", // Checks for commented-out Python code.
-              "PTH110", // Checks for uses of os.path.exists.
               "PTH123", // Checks for uses of the open() builtin.
               "COM812", // Ignore flake8-commas
               "PLR0913", // Consider for later - Checks for function definitions that include too many arguments.
               "FBT002", // Checks for the use of boolean positional arguments in function definitions
-              "PERF401" // Checks for for loops that can be replaced by a list comprehension.
+              "PERF401", // Checks for for loops that can be replaced by a list comprehension.
+              "PLR0911", // Checks for functions or methods with too many return statements.
+              "T201", // Checks for print statements.
+              "PERF203", // Checks for uses of except handling via try-except within for and while loops.
+              "C901" // Checks for functions with a high McCabe complexity.
             ],
             "extendSelect": ["I"],
             "enable": true
@@ -96,6 +103,7 @@
   },
   "languages": {
     "Python": {
+      // "language_servers": ["!pylsp", "pyright", "ruff"],
       "language_servers": ["!pylsp", "pyright", "ruff"],
       "format_on_save": "on",
       "formatter": [
@@ -112,5 +120,17 @@
         }
       ]
     }
+  },
+  // Settings related to preview tabs.
+  "preview_tabs": {
+    // Whether preview tabs should be enabled.
+    // Preview tabs allow you to open files in preview mode, where they close automatically
+    // when you switch to another file unless you explicitly pin them.
+    // This is useful for quickly viewing files without cluttering your workspace.
+    "enabled": false,
+    // Whether to open tabs in preview mode when selected from the file finder.
+    "enable_preview_from_file_finder": false,
+    // Whether a preview tab gets replaced when code navigation is used to navigate away from the tab.
+    "enable_preview_from_code_navigation": false
   }
 }
